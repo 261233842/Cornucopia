@@ -1,0 +1,9 @@
+{
+  "item.cornucopia.cornucopia":"Cornucopia",
+  "itemGroup.cornucopia":"Cornucopia",
+  "key.category.cornucopia.cornucopia_category": "Cornucopia",
+  "key.cornucopia.inventory":"open cornucopia inventory",
+  "screen.cornucopia.cornucopia_item_title":"Cornucopia",
+  "item.minecraft.cornucopia.fullness":"%s/%s",
+  "item.minecraft.cornucopia.description": "It symbolizes harvest and prosperity"
+}
