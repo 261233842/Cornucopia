@@ -23,8 +23,9 @@ public final class CornucopiaContents implements TooltipComponent
     public static final CornucopiaContents EMPTY = new CornucopiaContents(List.of());
     // todo 作用
     private static final int NO_STACK_INDEX = -1;
-    // Basic codec
+    // The codec to read/write the data to disk
     public static final Codec<CornucopiaContents> CODEC;
+    // The codec to read/write the data across the network
     public static final StreamCodec<RegistryFriendlyByteBuf, CornucopiaContents> STREAM_CODEC;
     // 用于物品存储的相关数据
     final List<ItemStack> items;
@@ -61,7 +62,7 @@ public final class CornucopiaContents implements TooltipComponent
     static Fraction getWeight(ItemStack stack)
     {
         // 修改容量权重逻辑
-        return Fraction.getFraction(1, stack.getMaxStackSize() * 2);
+        return Fraction.getFraction(1, stack.getMaxStackSize());
     }
 
     public ItemStack getItemUnsafe(int index)
@@ -132,14 +133,14 @@ public final class CornucopiaContents implements TooltipComponent
         return this.items.stream().map(ItemStack::copy).toList();
     }
 
-
     static {
+        // todo 增加range
         // 在类加载时，初始化 CODEC 和 STREAM_CODEC；模组注册 DataComponents 与原版注册不同
         CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 ItemStack.CODEC.listOf().fieldOf("items").forGetter(CornucopiaContents::getContentCopy)
         ).apply(instance, CornucopiaContents::new));
         STREAM_CODEC = StreamCodec.composite(
-                ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list()), CornucopiaContents::getContentCopy,
+                ItemStack.STREAM_CODEC.apply(ByteBufCodecs.list(1024)), CornucopiaContents::getContentCopy,
                 CornucopiaContents::new
         );
     }
@@ -147,13 +148,23 @@ public final class CornucopiaContents implements TooltipComponent
     // 由于CornucopiaContents的属性是final的，所以需要一个可变类来修改（此处为内部类）
     public static class Mutable
     {
+        public static final Fraction FRACTION_TWO = Fraction.getFraction(2, 1);
         private final List<ItemStack> items;
+        // weight 总共的占比权重情况
         private Fraction weight;
+        // 权重缓冲
+        private Fraction weightBuffer;
 
         public Mutable(CornucopiaContents contents)
         {
-            this.items = new ArrayList(contents.items);
-            this.weight = contents.weight;
+            this.items = new ArrayList<>(contents.items);
+            if (contents.weight.compareTo(Fraction.ONE) > 0) {
+                this.weight = Fraction.ONE;
+                weightBuffer = contents.weight.subtract(Fraction.ONE);
+            } else {
+                this.weight = contents.weight;
+                weightBuffer = Fraction.ZERO;
+            }
         }
 
         public CornucopiaContents.Mutable clearItems()
@@ -180,7 +191,7 @@ public final class CornucopiaContents implements TooltipComponent
 
         private int getMaxAmountToAdd(ItemStack stack)
         {
-            Fraction fraction = Fraction.ONE.subtract(this.weight);
+            Fraction fraction = Fraction.ONE.subtract(this.weightBuffer);
             return Math.max(fraction.divideBy(CornucopiaContents.getWeight(stack)).intValue(), 0);
         }
 
@@ -191,7 +202,9 @@ public final class CornucopiaContents implements TooltipComponent
                 if (i == 0) {
                     return 0;
                 } else {
-                    this.weight = this.weight.add(CornucopiaContents.getWeight(stack).multiplyBy(Fraction.getFraction(i, 1)));
+                    weightBuffer = weightBuffer.add(CornucopiaContents.getWeight(stack).multiplyBy(Fraction.getFraction(i, 1)));
+                    // 无论怎么加， weightBuffer 不会大于1
+                    if (this.weight.compareTo(Fraction.ONE) < 0) fillWeightFromBuffer();
                     // 寻找可以堆叠的stackIndex
                     int j = this.findStackableIndex(stack);
                     if (j != -1) {
@@ -227,8 +240,16 @@ public final class CornucopiaContents implements TooltipComponent
                 // 为什么要加 copy() ？ --> 原始item删除了，创建个副本
                 ItemStack itemstack = this.items.removeFirst().copy();
                 this.weight = this.weight.subtract(CornucopiaContents.getWeight(itemstack).multiplyBy(Fraction.getFraction(itemstack.getCount(), 1)));
+                if (this.weight.compareTo(Fraction.ONE) < 0) fillWeightFromBuffer();
                 return itemstack;
             }
+        }
+
+        private void fillWeightFromBuffer()
+        {
+            Fraction needsWeight = Fraction.ONE.subtract(this.weight);
+            this.weight.add(getMinFraction(needsWeight, weightBuffer));
+            weightBuffer = getMaxFraction(weightBuffer.subtract(needsWeight), Fraction.ZERO);
         }
 
         @Nullable
@@ -270,7 +291,17 @@ public final class CornucopiaContents implements TooltipComponent
 
         public CornucopiaContents toImmutable()
         {
-            return new CornucopiaContents(List.copyOf(this.items), this.weight);
+            return new CornucopiaContents(List.copyOf(this.items), this.weight.add(weightBuffer));
+        }
+
+        private Fraction getMinFraction(Fraction a, Fraction b)
+        {
+            return a.compareTo(b) < 0 ? a : b;
+        }
+
+        private Fraction getMaxFraction(Fraction a, Fraction b)
+        {
+            return a.compareTo(b) > 0 ? a : b;
         }
     }
 }

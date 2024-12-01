@@ -233,10 +233,9 @@ public class CornucopiaItem extends Item
         CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             // weight()的分子*64/weight()的分母 -> 向下取整
-            int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64*2);
+//            int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64/**2*/);
             // "容量权重"前端渲染修改
-            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 64*2).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.empty());
+            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", 1, 64/**2*/).withStyle(ChatFormatting.GRAY));
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.description").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
