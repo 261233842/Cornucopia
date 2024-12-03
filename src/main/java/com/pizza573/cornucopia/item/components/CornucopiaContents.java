@@ -153,18 +153,19 @@ public final class CornucopiaContents implements TooltipComponent
         // weight 总共的占比权重情况
         private Fraction weight;
         // 权重缓冲
-        private Fraction weightBuffer;
+//        private Fraction weightBuffer;
 
         public Mutable(CornucopiaContents contents)
         {
             this.items = new ArrayList<>(contents.items);
-            if (contents.weight.compareTo(Fraction.ONE) > 0) {
-                this.weight = Fraction.ONE;
-                weightBuffer = contents.weight.subtract(Fraction.ONE);
-            } else {
-                this.weight = contents.weight;
-                weightBuffer = Fraction.ZERO;
-            }
+            this.weight = contents.weight;
+//            if (contents.weight.compareTo(Fraction.ONE) > 0) {
+//                this.weight = Fraction.ONE;
+//                weightBuffer = contents.weight.subtract(Fraction.ONE);
+//            } else {
+//                this.weight = contents.weight;
+//                weightBuffer = Fraction.ZERO;
+//            }
         }
 
         public CornucopiaContents.Mutable clearItems()
@@ -191,7 +192,8 @@ public final class CornucopiaContents implements TooltipComponent
 
         private int getMaxAmountToAdd(ItemStack stack)
         {
-            Fraction fraction = Fraction.ONE.subtract(this.weightBuffer);
+//            Fraction fraction = Fraction.ONE.subtract(this.weightBuffer);
+            Fraction fraction = Fraction.ONE.subtract(this.weight);
             return Math.max(fraction.divideBy(CornucopiaContents.getWeight(stack)).intValue(), 0);
         }
 
@@ -202,9 +204,10 @@ public final class CornucopiaContents implements TooltipComponent
                 if (i == 0) {
                     return 0;
                 } else {
-                    weightBuffer = weightBuffer.add(CornucopiaContents.getWeight(stack).multiplyBy(Fraction.getFraction(i, 1)));
+//                    weightBuffer = weightBuffer.add(CornucopiaContents.getWeight(stack).multiplyBy(Fraction.getFraction(i, 1)));
+                    weight = weight.add(CornucopiaContents.getWeight(stack).multiplyBy(Fraction.getFraction(i, 1)));
                     // 无论怎么加， weightBuffer 不会大于1
-                    if (this.weight.compareTo(Fraction.ONE) < 0) fillWeightFromBuffer();
+//                    if (this.weight.compareTo(Fraction.ONE) < 0) fillWeightFromBuffer();
                     // 寻找可以堆叠的stackIndex
                     int j = this.findStackableIndex(stack);
                     if (j != -1) {
@@ -240,17 +243,17 @@ public final class CornucopiaContents implements TooltipComponent
                 // 为什么要加 copy() ？ --> 原始item删除了，创建个副本
                 ItemStack itemstack = this.items.removeFirst().copy();
                 this.weight = this.weight.subtract(CornucopiaContents.getWeight(itemstack).multiplyBy(Fraction.getFraction(itemstack.getCount(), 1)));
-                if (this.weight.compareTo(Fraction.ONE) < 0) fillWeightFromBuffer();
+//                if (this.weight.compareTo(Fraction.ONE) < 0) fillWeightFromBuffer();
                 return itemstack;
             }
         }
 
-        private void fillWeightFromBuffer()
-        {
-            Fraction needsWeight = Fraction.ONE.subtract(this.weight);
-            this.weight.add(getMinFraction(needsWeight, weightBuffer));
-            weightBuffer = getMaxFraction(weightBuffer.subtract(needsWeight), Fraction.ZERO);
-        }
+//        private void fillWeightFromBuffer()
+//        {
+//            Fraction needsWeight = Fraction.ONE.subtract(this.weight);
+//            this.weight.add(getMinFraction(needsWeight, weightBuffer));
+//            weightBuffer = getMaxFraction(weightBuffer.subtract(needsWeight), Fraction.ZERO);
+//        }
 
         @Nullable
         public ItemStack removeOne(int subCount)
@@ -291,7 +294,8 @@ public final class CornucopiaContents implements TooltipComponent
 
         public CornucopiaContents toImmutable()
         {
-            return new CornucopiaContents(List.copyOf(this.items), this.weight.add(weightBuffer));
+//            return new CornucopiaContents(List.copyOf(this.items), this.weight.add(weightBuffer));
+            return new CornucopiaContents(List.copyOf(this.items), this.weight);
         }
 
         private Fraction getMinFraction(Fraction a, Fraction b)
