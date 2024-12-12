@@ -46,9 +46,10 @@ public class CornucopiaItem extends Item
     }
 
     // 供物品属性weight使用，类似boson的magicIngot，“使物品能够动态的切换贴图”
-    public static float getWeightDisplay(ItemStack stack) {
+    public static float getWeightDisplay(ItemStack stack)
+    {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        return cornucopiaContents.weight().floatValue() ;
+        return cornucopiaContents.weight().floatValue();
     }
 
     @Override
@@ -124,7 +125,7 @@ public class CornucopiaItem extends Item
     {
         ItemStack cornucopia = player.getItemInHand(usedHand);
         ItemStack food = getFirstFood(cornucopia);
-        FoodProperties foodproperties=food.getFoodProperties(player);
+        FoodProperties foodproperties = food.getFoodProperties(player);
         if (foodproperties != null) {
             if (player.canEat(foodproperties.canAlwaysEat())) {
                 // 告诉系统开始使用物品
@@ -205,17 +206,17 @@ public class CornucopiaItem extends Item
     public int getBarWidth(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        // 重量*12+1并向下取整，再取其和13的最小值
-        return Math.min(1 + Mth.mulAndTruncate(cornucopiaContents.weight(), 12), 13);
+        // 重量*12+1并向下取整，再取其和13的最小值 todo 兼容容量附魔
+        return Math.min(1 + Mth.mulAndTruncate(cornucopiaContents.weight(), 12/2/*除以容量附魔等级*/), 13);
     }
 
     @Override
-    public int getBarColor(ItemStack stack)
+    public int getBarColor(@NotNull ItemStack stack)
     {
         return BAR_COLOR;
     }
 
-    // ui
+    // 容量ui
     @Override
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack)
     {
@@ -233,9 +234,9 @@ public class CornucopiaItem extends Item
         CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             // weight()的分子*64/weight()的分母 -> 向下取整
-            int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64/**2*/);
+            int foodValues = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
             // "容量权重"前端渲染修改
-            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 64/**2*/).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", foodValues, 64*2/*乘以容量等级*/).withStyle(ChatFormatting.GRAY));
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.description").withStyle(ChatFormatting.DARK_GREEN));
         }
     }

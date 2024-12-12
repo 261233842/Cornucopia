@@ -42,12 +42,13 @@ public class InstrumentItemMixin extends Item
         super(properties);
     }
 
+    // INVOKE 可以在调用 target 中对应的方法之前执行
     @Inject(method = "appendHoverText",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;getInstrument(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"))
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info){
         CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
-            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 64).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 128).withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -140,11 +141,11 @@ public class InstrumentItemMixin extends Item
     public int getBarWidth(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        return Math.min(1 + Mth.mulAndTruncate(cornucopiaContents.weight(), 12), 13);
+        return Math.min(1 + Mth.mulAndTruncate(cornucopiaContents.weight(), 6), 13);
     }
 
     @Override
-    public int getBarColor(ItemStack stack)
+    public int getBarColor(@NotNull ItemStack stack)
     {
         return BAR_COLOR;
     }
