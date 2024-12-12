@@ -16,7 +16,6 @@ import org.apache.commons.lang3.math.Fraction;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -160,7 +159,7 @@ public final class CornucopiaContents implements TooltipComponent
 
         public Mutable(CornucopiaContents contents)
         {
-            this.items = new LinkedList<>(contents.items);
+            this.items = new ArrayList<>(contents.items);
             this.weight = contents.weight;
             this.maxSize = contents.maxSize;
         }
@@ -227,16 +226,16 @@ public final class CornucopiaContents implements TooltipComponent
 
                             ItemStack stackedItemStack = stackableItemStack.copyWithCount(maxStackSize);
                             stack.shrink(needCount);
-                            this.items.add(stackedItemStack);
-                            this.items.add(stack.split(restCount));
+                            this.items.addFirst(stackedItemStack);
+                            this.items.addFirst(stack.split(restCount));
                         } else {
                             ItemStack stackedItemStack = stackableItemStack.copyWithCount(stackableItemStack.getCount() + i);
                             stack.shrink(i);
-                            this.items.add(stackedItemStack);
+                            this.items.addFirst(stackedItemStack);
                         }
                     } else {// 没有找到可堆叠的 ItemStack
                         // stack.split(i)：把 Stack 的数量减少 i，并返回另一个 数量为 i 的 ItemStack
-                        this.items.add(stack.split(i));
+                        this.items.addFirst(stack.split(i));
                     }
 
                     return i;
@@ -267,34 +266,35 @@ public final class CornucopiaContents implements TooltipComponent
             }
         }
 
-        @Nullable
-        public ItemStack removeOne(int subCount)
+        public void removeSingle(int index)
         {
+            // 没有items
             if (this.items.isEmpty()) {
-                return ItemStack.EMPTY;
-            } else {
-                ItemStack itemstack = this.items.getFirst();
-                ItemStack resultItem = this.items.getFirst().copy();
-                int count = itemstack.getCount();
+            } else {// 有
+                // 获取到本体
+                ItemStack rawStack = this.items.get(index);
+                // 副本
+                ItemStack resultStack = this.items.get(index).copy();
+                int count = rawStack.getCount();
 
-                if (Math.max(count - subCount, 0) == 0) {
-                    return this.removeOne();
-                } else {
-                    itemstack.setCount(count - subCount);
-                    resultItem.setCount(subCount);
-                    this.weight = this.weight.subtract(CornucopiaContents.getWeight(itemstack).multiplyBy(Fraction.getFraction(subCount, 1)));
-                    return resultItem;
+                // 刚好删除该种物品
+                if (count == 1) {
+                    this.items.remove(index);
+                } else {// 有剩余
+                    rawStack.setCount(count - 1);
+                    resultStack.setCount(1);
+                    this.weight = this.weight.subtract(CornucopiaContents.getWeight(rawStack));
                 }
             }
         }
 
         @Nullable
-        public ItemStack getOne()
+        public ItemStack getOne(int index)
         {
             if (this.items.isEmpty()) {
                 return ItemStack.EMPTY;
             } else {
-                return this.items.getFirst().copy();
+                return this.items.get(index).copy();
             }
         }
 
