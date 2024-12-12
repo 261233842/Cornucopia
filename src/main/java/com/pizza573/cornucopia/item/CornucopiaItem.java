@@ -49,7 +49,8 @@ public class CornucopiaItem extends Item
     public static float getWeightDisplay(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        return cornucopiaContents.weight().floatValue();
+        // todo 兼容容量附魔
+        return cornucopiaContents.weight().floatValue()/2f/*除以附魔等级*/;
     }
 
     @Override
@@ -75,7 +76,6 @@ public class CornucopiaItem extends Item
                     }
                     // 只能存入food（参考 Item 的 finishUsingItem(...)，最初调用的比较底层）
                 } else if (other.getItem().canFitInsideContainerItems() && other.getFoodProperties(player) != null) {
-                    // todo 解析tryTransfer(...) 将slot中的物品存入cornucopia
                     int i = cornucopiaContents$mutable.tryTransfer(slot, player);
                     if (i > 0) {
                         this.playInsertSound(player);
@@ -177,6 +177,7 @@ public class CornucopiaItem extends Item
         return UseAnim.EAT;
     }
 
+    // 获取使用时间
     @Override
     public int getUseDuration(ItemStack cornucopia, @NotNull LivingEntity entity)
     {
@@ -185,7 +186,7 @@ public class CornucopiaItem extends Item
         if (cornucopiaContents != null) {
             CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
             ItemStack food = cornucopiaContents$mutable.removeOne();
-            // todo optional
+
             if (food != null) {
                 foodProperties = food.getFoodProperties(entity);
             }

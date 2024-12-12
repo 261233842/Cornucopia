@@ -122,7 +122,7 @@ public class InstrumentItemMixin extends Item
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity livingEntity)
     {
         CornucopiaContents cornucopiaContents=stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null && cornucopiaContents.weight().compareTo(Fraction.ONE) == 0) {
+        if (cornucopiaContents != null && cornucopiaContents.weight().compareTo(Fraction.getFraction(2,1)) == 0) {
             ItemStack cornucopiaItemStack = new ItemStack(ModItems.CORNUCOPIA.get());
             cornucopiaItemStack.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents);
             return cornucopiaItemStack;

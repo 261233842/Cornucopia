@@ -16,6 +16,7 @@ import org.apache.commons.lang3.math.Fraction;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -138,7 +139,6 @@ public final class CornucopiaContents implements TooltipComponent
     }
 
     static {
-        // todo 增加range
         // 在类加载时，初始化 CODEC 和 STREAM_CODEC；模组注册 DataComponents 与原版注册不同
         CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 ItemStack.CODEC.listOf().fieldOf("items").forGetter(CornucopiaContents::getContentCopy)
@@ -160,7 +160,7 @@ public final class CornucopiaContents implements TooltipComponent
 
         public Mutable(CornucopiaContents contents)
         {
-            this.items = new ArrayList<>(contents.items);
+            this.items = new LinkedList<>(contents.items);
             this.weight = contents.weight;
             this.maxSize = contents.maxSize;
         }
@@ -210,7 +210,6 @@ public final class CornucopiaContents implements TooltipComponent
                 if (i == 0) {
                     return 0;
                 } else {
-                    // todo 优化
                     this.weight = weight.add(CornucopiaContents.getWeight(stack).multiplyBy(Fraction.getFraction(i, 1)));
                     // 寻找可以堆叠的stackIndex
                     int j = this.findStackableIndex(stack);
@@ -218,25 +217,26 @@ public final class CornucopiaContents implements TooltipComponent
                     if (j != -1) {
                         // cornucopia 中寻找到可以堆叠的 ItemStack
                         ItemStack stackableItemStack = this.items.remove(j);
+                        int maxStackSize = stackableItemStack.getMaxStackSize();
                         //
-                        if (stackableItemStack.getCount() + i > stackableItemStack.getMaxStackSize()) {
-                            // 64 stackableItemStack(60) i(5) restCount(1) needCount(4)
+                        if (stackableItemStack.getCount() + i > maxStackSize) {
+                            // maxStackSize(64） stackableItemStack(60) i(5) restCount(1) needCount(4)
                             // restCount 不可能大于 maxStackSize
-                            int restCount = (stackableItemStack.getCount() + i) - stackableItemStack.getMaxStackSize();
-                            int needCount = stackableItemStack.getMaxStackSize() - stackableItemStack.getCount();
+                            int restCount = (stackableItemStack.getCount() + i) - maxStackSize;
+                            int needCount = maxStackSize - stackableItemStack.getCount();
 
-                            ItemStack stackedItemStack = stackableItemStack.copyWithCount(stackableItemStack.getMaxStackSize());
+                            ItemStack stackedItemStack = stackableItemStack.copyWithCount(maxStackSize);
                             stack.shrink(needCount);
-                            this.items.addFirst(stackedItemStack);
-                            this.items.addFirst(stack.split(restCount));
+                            this.items.add(stackedItemStack);
+                            this.items.add(stack.split(restCount));
                         } else {
                             ItemStack stackedItemStack = stackableItemStack.copyWithCount(stackableItemStack.getCount() + i);
                             stack.shrink(i);
-                            this.items.addFirst(stackedItemStack);
+                            this.items.add(stackedItemStack);
                         }
                     } else {// 没有找到可堆叠的 ItemStack
                         // stack.split(i)：把 Stack 的数量减少 i，并返回另一个 数量为 i 的 ItemStack
-                        this.items.addFirst(stack.split(i));
+                        this.items.add(stack.split(i));
                     }
 
                     return i;
