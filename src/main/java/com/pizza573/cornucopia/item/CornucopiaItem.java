@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -183,21 +184,24 @@ public class CornucopiaItem extends Item
                 continue; // 跳过无效的物品
             }
 
-            if (foodLevel == 20) {
-                if (foodProperties.canAlwaysEat() && isGoldenApple(itemstack)) return i;
-            } else {
-                if (health > 6f) {
-                    if (!isGoldenApple(itemstack)) {
-                        int newNutrition = foodProperties.nutrition();
-                        int newScore = Math.abs(20 - (foodLevel + newNutrition));
-                        if (newScore < score || (newScore == score && newNutrition > nutrition)) {
-                            index = i;
-                            score = newScore;
-                        }
+            if (foodLevel == 20 && foodProperties.canAlwaysEat()) {
+                return i;
+            } else if (foodLevel < 20) {// 饥饿值非满
+                // 不是（附魔）金苹果，根据饥饿值选择最合适的食物，最后返回
+                if (!isGoldenApple(itemstack)) {
+                    int newNutrition = foodProperties.nutrition();
+                    int newScore = Math.abs(20 - (foodLevel + newNutrition));
+                    // todo 目前不考虑饱和度
+                    if (newScore < score || (newScore == score && newNutrition > nutrition)) {
+                        index = i;
+                        score = newScore;
                     }
-                } else {
-                    if (isGoldenApple(itemstack)) return i;
                 }
+                //根据生命值，选择合适的食物
+                if (health > 6 && health <= 10f && itemstack.getItem() == Items.GOLDEN_CARROT)
+                    return i;
+                else if (health <= 6f && isGoldenApple(itemstack)) // 低生命值，吃（附魔）金苹果
+                    return i;
             }
         }
 
