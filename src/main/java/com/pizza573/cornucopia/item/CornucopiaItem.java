@@ -126,7 +126,7 @@ public class CornucopiaItem extends Item
     }
 
     // todo bug：谜之炖菜不会留下碗（可以参考牛奶）
-    // todo 奶桶需要例外吗？
+    // todo 奶桶需要例外加入吗？
     // 右键使用 Cornucopia
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand usedHand)
@@ -248,7 +248,7 @@ public class CornucopiaItem extends Item
 
     // 获取使用时间
     @Override
-    public int getUseDuration(ItemStack cornucopia, @NotNull LivingEntity entity)
+    public int getUseDuration(@NotNull ItemStack cornucopia, @NotNull LivingEntity entity)
     {
         FoodProperties foodProperties = this.suitableFood.getFoodProperties(entity);
         return foodProperties != null ? foodProperties.eatDurationTicks() : 0;
