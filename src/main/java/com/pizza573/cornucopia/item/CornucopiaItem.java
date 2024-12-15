@@ -25,9 +25,7 @@ import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class CornucopiaItem extends Item
