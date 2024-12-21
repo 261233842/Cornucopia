@@ -9,7 +9,7 @@ Cornucopia is a new food storage item that allows players to quickly and easily 
 - Use a goat horn item filled with food to convert.
 
 ### Shortcut key：
-- **Hold Ctrl + Shift + Q** at the same time: You can discard all the food in Cornucopia at once.
+- **Hold Shift + Q** at the same time: You can discard all the food in Cornucopia at once.
 
 ## Modification of goat horn item behavior
 
@@ -37,7 +37,7 @@ The feeding mechanism automatically selects the most appropriate food based on t
 - 使用装满食物的山羊角物品转换获得。
 
 ### 快捷键：
-- **同时按住 Ctrl + Shift + Q**：可以将丰饶角中的所有食物一次性丢弃。
+- **同时按住 Shift + Q**：可以将丰饶角中的所有食物一次性丢弃。
 
 ## 山羊角物品行为的修改
 
