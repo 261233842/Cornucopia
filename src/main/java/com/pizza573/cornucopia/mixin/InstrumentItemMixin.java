@@ -1,5 +1,6 @@
 package com.pizza573.cornucopia.mixin;
 
+import com.pizza573.cornucopia.Config;
 import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.init.ModDataComponents;
 import com.pizza573.cornucopia.init.ModItems;
@@ -65,7 +66,7 @@ public class InstrumentItemMixin extends Item
                 ItemStack other = slot.getItem();
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
                 if (other.isEmpty()) {
-                    this.playRemoveOneSound(player);
+                    this.mDK_1_21_ModDevGradle_main$playRemoveOneSound(player);
                     // 移除单个种类的物品
                     ItemStack itemstack1 = cornucopiaContents$mutable.removeOne();
                     if (itemstack1 != null) {
@@ -77,7 +78,7 @@ public class InstrumentItemMixin extends Item
                 } else if (other.getItem().canFitInsideContainerItems() && other.getFoodProperties(player) != null) {
                     int i = cornucopiaContents$mutable.tryTransfer(slot, player);
                     if (i > 0) {
-                        this.playInsertSound(player);
+                        this.mDK_1_21_ModDevGradle_main$playInsertSound(player);
                     }
                 }
 
@@ -100,14 +101,14 @@ public class InstrumentItemMixin extends Item
                 if (other.isEmpty()) {
                     ItemStack itemstack = cornucopiaContents$mutable.removeOne();
                     if (itemstack != null) {
-                        this.playRemoveOneSound(player);
+                        this.mDK_1_21_ModDevGradle_main$playRemoveOneSound(player);
                         access.set(itemstack);
                     }
                     // 只能存入food（参考 Item 的 finishUsingItem(...)，最初调用的比较底层）
                 } else if (other.getFoodProperties(player) != null) {
                     int i = cornucopiaContents$mutable.tryInsert(other);
                     if (i > 0) {
-                        this.playInsertSound(player);
+                        this.mDK_1_21_ModDevGradle_main$playInsertSound(player);
                     }
                 }
 
@@ -124,7 +125,11 @@ public class InstrumentItemMixin extends Item
         CornucopiaContents cornucopiaContents=stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null && cornucopiaContents.weight().compareTo(Fraction.getFraction(2,1)) == 0) {
             ItemStack cornucopiaItemStack = new ItemStack(ModItems.CORNUCOPIA.get());
-            cornucopiaItemStack.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents);
+            if(Config.COMMON.enableClearFoods.get()){
+                cornucopiaItemStack.set(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
+            }else{
+                cornucopiaItemStack.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents);
+            }
             return cornucopiaItemStack;
         }
         // 返回最初的stack，即CornucopiaItem
@@ -173,13 +178,13 @@ public class InstrumentItemMixin extends Item
     }
 
     @Unique
-    private void playRemoveOneSound(Entity entity)
+    private void mDK_1_21_ModDevGradle_main$playRemoveOneSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
     @Unique
-    private void playInsertSound(Entity entity)
+    private void mDK_1_21_ModDevGradle_main$playInsertSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }

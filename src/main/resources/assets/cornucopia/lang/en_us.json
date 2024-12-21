@@ -1,9 +1,11 @@
 {
-  "item.cornucopia.cornucopia":"Cornucopia",
-  "itemGroup.cornucopia":"Cornucopia",
-  "key.category.cornucopia.cornucopia_category": "Cornucopia",
-  "key.cornucopia.inventory":"open cornucopia inventory",
-  "screen.cornucopia.cornucopia_item_title":"Cornucopia",
-  "item.minecraft.cornucopia.fullness":"%s/%s",
-  "item.minecraft.cornucopia.description": "It symbolizes harvest and prosperity"
+  "cornucopia.config.enable_clear_foods": "Empty the food after converting the goat horn into a cornucopia",
+  "cornucopia.config.login_with_cornucopia": "Join the world with Cornucopia",
+  "item.cornucopia.cornucopia": "Cornucopia",
+  "item.minecraft.cornucopia.description": "It symbolizes harvest and prosperity",
+  "item.minecraft.cornucopia.fullness": "%s/%s",
+  "itemGroup.cornucopia": "Cornucopia",
+  "key.categories.cornucopia": "Cornucopia",
+  "key.cornucopia.drop_cornucopia_contents": "drop food from cornucopia",
+  "screen.cornucopia.cornucopia_item_title": "Cornucopia"
 }

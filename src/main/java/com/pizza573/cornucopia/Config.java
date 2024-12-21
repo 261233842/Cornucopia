@@ -1,0 +1,36 @@
+package com.pizza573.cornucopia;
+
+import net.neoforged.neoforge.common.ModConfigSpec;
+import org.apache.commons.lang3.tuple.Pair;
+
+public class Config
+{
+    // ModConfigSpec
+    public static final ModConfigSpec CONFIG_SPEC;// config_specialization
+    // config values
+    public static final Common COMMON;
+
+    static {
+        final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
+        COMMON = specPair.getLeft();
+        CONFIG_SPEC = specPair.getRight();
+    }
+
+    public static class Common
+    {
+        public final ModConfigSpec.BooleanValue loginWithCornucopia;
+        public final ModConfigSpec.BooleanValue enableClearFoods;
+
+        public Common(ModConfigSpec.Builder builder)
+        {
+            loginWithCornucopia = builder
+//                    .comment("加入世界自带丰饶角")
+                    .translation("cornucopia.config.login_with_cornucopia")
+                    .define("loginWithCornucopia", true);
+            enableClearFoods = builder
+//                    .comment("转换为丰饶角后清空食物")
+                    .translation("cornucopia.config.enable_clear_foods")
+                    .define("enableClearFoods", false);
+        }
+    }
+}
