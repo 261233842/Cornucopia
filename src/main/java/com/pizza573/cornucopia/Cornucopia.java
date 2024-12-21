@@ -3,6 +3,9 @@ package com.pizza573.cornucopia;
 import com.pizza573.cornucopia.init.ModDataComponents;
 import com.pizza573.cornucopia.init.ModCreativeTabs;
 import com.pizza573.cornucopia.init.ModItems;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -23,5 +26,8 @@ public class Cornucopia
         ModItems.REGISTER.register(modEventBus);
         ModCreativeTabs.REGISTER.register(modEventBus);
         ModDataComponents.REGISTRAR.register(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.COMMON,Config.CONFIG_SPEC);
+        // This will use NeoForge's ConfigurationScreen to display this mod's configs
+        modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 }
