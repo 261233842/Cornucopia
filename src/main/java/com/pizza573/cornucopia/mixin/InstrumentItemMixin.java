@@ -66,7 +66,7 @@ public class InstrumentItemMixin extends Item
                 ItemStack other = slot.getItem();
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
                 if (other.isEmpty()) {
-                    this.mDK_1_21_ModDevGradle_main$playRemoveOneSound(player);
+                    this.mixin_playRemoveOneSound(player);
                     // 移除单个种类的物品
                     ItemStack itemstack1 = cornucopiaContents$mutable.removeOne();
                     if (itemstack1 != null) {
@@ -78,7 +78,7 @@ public class InstrumentItemMixin extends Item
                 } else if (other.getItem().canFitInsideContainerItems() && other.getFoodProperties(player) != null) {
                     int i = cornucopiaContents$mutable.tryTransfer(slot, player);
                     if (i > 0) {
-                        this.mDK_1_21_ModDevGradle_main$playInsertSound(player);
+                        this.mixin_playInsertSound(player);
                     }
                 }
 
@@ -101,14 +101,14 @@ public class InstrumentItemMixin extends Item
                 if (other.isEmpty()) {
                     ItemStack itemstack = cornucopiaContents$mutable.removeOne();
                     if (itemstack != null) {
-                        this.mDK_1_21_ModDevGradle_main$playRemoveOneSound(player);
+                        this.mixin_playRemoveOneSound(player);
                         access.set(itemstack);
                     }
                     // 只能存入food（参考 Item 的 finishUsingItem(...)，最初调用的比较底层）
                 } else if (other.getFoodProperties(player) != null) {
                     int i = cornucopiaContents$mutable.tryInsert(other);
                     if (i > 0) {
-                        this.mDK_1_21_ModDevGradle_main$playInsertSound(player);
+                        this.mixin_playInsertSound(player);
                     }
                 }
 
@@ -178,13 +178,13 @@ public class InstrumentItemMixin extends Item
     }
 
     @Unique
-    private void mDK_1_21_ModDevGradle_main$playRemoveOneSound(Entity entity)
+    private void mixin_playRemoveOneSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
     @Unique
-    private void mDK_1_21_ModDevGradle_main$playInsertSound(Entity entity)
+    private void mixin_playInsertSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
