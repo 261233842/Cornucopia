@@ -124,7 +124,6 @@ public class CornucopiaItem extends Item
         }
     }
 
-    // todo bug：谜之炖菜不会留下碗（可以参考牛奶）
     // todo 奶桶需要例外加入吗？
     // 右键使用 Cornucopia
     @Override
