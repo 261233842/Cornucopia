@@ -12,6 +12,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
+// todo tooltip貌似不用单独写，目前调用原版的也行
 @OnlyIn(Dist.CLIENT)
 public class ClientCornucopiaTooltip implements ClientTooltipComponent
 {
