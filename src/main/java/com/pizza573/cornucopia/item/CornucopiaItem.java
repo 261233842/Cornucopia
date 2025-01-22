@@ -3,6 +3,7 @@ package com.pizza573.cornucopia.item;
 import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.init.ModDataComponents;
+import com.pizza573.cornucopia.util.FoodSelectHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.ClickAction;
@@ -31,12 +31,10 @@ import java.util.Optional;
 public class CornucopiaItem extends Item
 {
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
-    private static final int TOOLTIP_MAX_WEIGHT = 64;
     private int suitableFoodIndex;
     private ItemStack suitableFood = ItemStack.EMPTY;
 
-
-    public CornucopiaItem(Item.Properties properties)
+    public CornucopiaItem(Properties properties)
     {
         super(properties);
     }
@@ -124,134 +122,50 @@ public class CornucopiaItem extends Item
         }
     }
 
-    // todo 奶桶需要例外加入吗？
     // 右键使用 Cornucopia
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand usedHand)
     {
         ItemStack cornucopia = player.getItemInHand(usedHand);
-        // 每次使用的时候都要更新，不要进行判断
-        this.suitableFoodIndex = getSuitableFoodIndex(player, cornucopia);
-        this.suitableFood = getSingleFood(cornucopia, this.suitableFoodIndex);
-
-        FoodProperties foodproperties = null;
-        if (this.suitableFood != null) foodproperties = this.suitableFood.getFoodProperties(player);
-
-
-        if (foodproperties != null) {
-            if (player.canEat(foodproperties.canAlwaysEat())) {
-                // 告诉系统开始使用物品
-                player.startUsingItem(usedHand);
-                return InteractionResultHolder.consume(cornucopia);
-            } else {
-                return InteractionResultHolder.fail(cornucopia);
-            }
-        } else {
-            return InteractionResultHolder.pass(player.getItemInHand(usedHand));
-        }
-    }
-
-    private int getSuitableFoodIndex(Player player, ItemStack cornucopia)
-    {
         CornucopiaContents contents = cornucopia.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        List<ItemStack> items = (List<ItemStack>) contents.items();
 
-        // 处理边界条件
-        if (items.isEmpty()) {
-            return 0; // 或者抛出异常
+        // 判空
+        if (contents.isEmpty()) return InteractionResultHolder.pass(cornucopia);
+
+        // 获取选择好的食物的 FoodProperties
+        suitableFoodIndex = FoodSelectHelper.getSuitableFoodIndex(player, cornucopia);
+        suitableFood = FoodSelectHelper.getSingleFood(cornucopia, suitableFoodIndex);
+        FoodProperties foodProperties = suitableFood.getFoodProperties(player);
+
+        // 吃食物
+        if (player.canEat(foodProperties != null && foodProperties.canAlwaysEat())) {
+            // 告诉系统开始使用物品
+            player.startUsingItem(usedHand);
+            return InteractionResultHolder.consume(cornucopia);
+        } else {
+            return InteractionResultHolder.fail(cornucopia);
         }
-
-        // 长度为1
-        if (items.size() == 1) {
-            return 0;
-        }
-
-        int index = 0;
-        int score = 20;
-        int nutrition = 0;
-
-        int foodLevel = player.getFoodData().getFoodLevel();
-        float health = player.getHealth();
-
-        for (int i = 0; i < items.size(); i++) {
-            ItemStack itemstack = items.get(i);
-            FoodProperties foodProperties = itemstack.getItem().getFoodProperties(itemstack, player);
-
-            if (foodProperties == null) {
-                continue; // 跳过无效的物品
-            }
-
-            if (foodLevel == 20 && foodProperties.canAlwaysEat()) {
-                return i;
-            } else if (foodLevel < 20) {// 饥饿值非满
-                // 不是（附魔）金苹果，根据饥饿值选择最合适的食物，最后返回
-                if (!isGoldenApple(itemstack)) {
-                    int newNutrition = foodProperties.nutrition();
-                    int newScore = Math.abs(20 - (foodLevel + newNutrition));
-                    // todo 目前不考虑饱和度
-                    if (newScore < score || (newScore == score && newNutrition > nutrition)) {
-                        index = i;
-                        score = newScore;
-                    }
-                }
-                //根据生命值，选择合适的食物
-                if (health > 6 && health <= 10f && itemstack.getItem() == Items.GOLDEN_CARROT)
-                    return i;
-                else if (health <= 6f && isGoldenApple(itemstack)) // 低生命值，吃（附魔）金苹果
-                    return i;
-            }
-        }
-
-        return index;
-    }
-
-    private boolean isGoldenApple(ItemStack itemstack)
-    {
-        return itemstack.getItem() == Items.GOLDEN_APPLE || itemstack.getItem() == Items.ENCHANTED_GOLDEN_APPLE;
     }
 
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity livingEntity)
     {
-        this.suitableFood.getItem().finishUsingItem(this.suitableFood, level, livingEntity);
-        removeSingleFood(stack, suitableFoodIndex);
+        suitableFood.getItem().finishUsingItem(suitableFood, level, livingEntity);
+        FoodSelectHelper.removeSingleFood(stack, suitableFoodIndex);
         // 返回最初的stack，即CornucopiaItem
         return stack;
     }
 
-    private void removeSingleFood(ItemStack cornucopia, int index)
-    {
-        CornucopiaContents cornucopiaContents = cornucopia.get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null) {
-            CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-            cornucopiaContents$mutable.removeSingle(index);
-            cornucopia.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents$mutable.toImmutable());
-        }
-    }
-
-    private ItemStack getSingleFood(ItemStack cornucopia, int index)
-    {
-        CornucopiaContents cornucopiaContents = cornucopia.get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null) {
-            CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-            ItemStack food = cornucopiaContents$mutable.getOne(index);
-            cornucopia.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents$mutable.toImmutable());
-            return food;
-        }
-        return ItemStack.EMPTY;
-    }
-
-
     @Override
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack)
     {
-        return this.suitableFood.getItem().getUseAnimation(this.suitableFood);
+        return suitableFood.getItem().getUseAnimation(suitableFood);
     }
 
     // 获取使用时间
     @Override
     public int getUseDuration(@NotNull ItemStack cornucopia, @NotNull LivingEntity entity)
     {
-        FoodProperties foodProperties = this.suitableFood.getFoodProperties(entity);
+        FoodProperties foodProperties = suitableFood.getFoodProperties(entity);
         return foodProperties != null ? foodProperties.eatDurationTicks() : 0;
     }
 
@@ -289,7 +203,7 @@ public class CornucopiaItem extends Item
 
     // 添加文本
     @Override
-    public void appendHoverText(ItemStack stack, Item.@NotNull TooltipContext
+    public void appendHoverText(ItemStack stack, @NotNull TooltipContext
             context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag)
     {
         CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
@@ -299,17 +213,6 @@ public class CornucopiaItem extends Item
             // "容量权重"前端渲染修改
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", foodValues, 64 * 2/*乘以容量等级*/).withStyle(ChatFormatting.GRAY));
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.description").withStyle(ChatFormatting.DARK_GREEN));
-        }
-    }
-
-    // 当itemEntity被摧毁时
-    @Override
-    public void onDestroyed(ItemEntity itemEntity)
-    {
-        CornucopiaContents cornucopiaContents = itemEntity.getItem().get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null) {
-            itemEntity.getItem().set(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-            ItemUtils.onContainerDestroyed(itemEntity, cornucopiaContents.itemsCopy());
         }
     }
 
@@ -332,12 +235,12 @@ public class CornucopiaItem extends Item
     @Override
     public @NotNull SoundEvent getDrinkingSound()
     {
-        return this.suitableFood.getItem().getDrinkingSound();
+        return suitableFood.getItem().getDrinkingSound();
     }
 
     @Override
     public @NotNull SoundEvent getEatingSound()
     {
-        return this.suitableFood.getItem().getEatingSound();
+        return suitableFood.getItem().getEatingSound();
     }
 }
