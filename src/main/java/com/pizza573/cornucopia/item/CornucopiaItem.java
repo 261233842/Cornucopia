@@ -22,6 +22,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +43,7 @@ public class CornucopiaItem extends Item
 
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public @NotNull Component getName(@NotNull ItemStack stack)
     {
         // 修改名称颜色为暗绿色
@@ -48,6 +51,7 @@ public class CornucopiaItem extends Item
     }
 
     // 供物品属性weight使用，类似boson的magicIngot，“使物品能够动态的切换贴图”
+    @OnlyIn(Dist.CLIENT)
     public static float getWeightDisplay(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
@@ -156,6 +160,7 @@ public class CornucopiaItem extends Item
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack)
     {
         return suitableFood.getItem().getUseAnimation(suitableFood);
@@ -171,6 +176,7 @@ public class CornucopiaItem extends Item
 
     // 是否显示bar条（耐久度bar、收纳袋容量bar）
     @Override
+    @OnlyIn(Dist.CLIENT)
     public boolean isBarVisible(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
@@ -178,6 +184,7 @@ public class CornucopiaItem extends Item
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public int getBarWidth(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
@@ -186,6 +193,7 @@ public class CornucopiaItem extends Item
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public int getBarColor(@NotNull ItemStack stack)
     {
         return BAR_COLOR;
@@ -193,6 +201,7 @@ public class CornucopiaItem extends Item
 
     // 容量ui
     @Override
+    @OnlyIn(Dist.CLIENT)
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack)
     {
         // Optional.ofNullable(...) 返回Optional对象，如果参数为null，则返回Optional.empty()，否则返回Optional.of(...)
@@ -203,6 +212,7 @@ public class CornucopiaItem extends Item
 
     // 添加文本
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @NotNull TooltipContext
             context, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag tooltipFlag)
     {
@@ -222,11 +232,13 @@ public class CornucopiaItem extends Item
         return false;
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void playRemoveOneSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void playInsertSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);

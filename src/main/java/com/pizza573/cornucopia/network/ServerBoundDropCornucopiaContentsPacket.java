@@ -11,10 +11,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import org.jetbrains.annotations.NotNull;
 
 public record ServerBoundDropCornucopiaContentsPacket(String message) implements CustomPacketPayload
 {
@@ -46,7 +46,7 @@ public record ServerBoundDropCornucopiaContentsPacket(String message) implements
     }
 
     @Override
-    public Type<? extends CustomPacketPayload> type()
+    public @NotNull Type<? extends CustomPacketPayload> type()
     {
         return TYPE;
     }
@@ -64,10 +64,4 @@ public record ServerBoundDropCornucopiaContentsPacket(String message) implements
             return false;
         }
     }
-
-    private void playDropContentsSound(Entity entity)
-    {
-        entity.playSound(SoundEvents.BUNDLE_DROP_CONTENTS, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
-    }
-
 }
