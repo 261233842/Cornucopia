@@ -42,7 +42,9 @@ public class NeoforgeEventHandler
             if (cornucopia.getItem() == ModItems.CORNUCOPIA.get()) {
                 int suitableFoodIndex = FoodSelectHelper.getSuitableFoodIndex(player, cornucopia);
                 ItemStack suitableFood = FoodSelectHelper.getSingleFood(cornucopia, suitableFoodIndex);
+                System.out.println("suitableFood: "+suitableFood);
                 FoodProperties foodProperties = suitableFood.getFoodProperties(player);
+                if(foodProperties!=null) System.out.println("nutrition: "+foodProperties.nutrition());
                 cornucopia.set(DataComponents.FOOD, foodProperties);
             }
         }

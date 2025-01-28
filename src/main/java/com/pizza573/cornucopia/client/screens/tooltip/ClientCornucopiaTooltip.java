@@ -18,7 +18,6 @@ public class ClientCornucopiaTooltip implements ClientTooltipComponent
 {
     private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("container/bundle/background");
     private final CornucopiaContents contents;
-    
 
     public ClientCornucopiaTooltip(CornucopiaTooltip component) {
         this.contents = component.contents();

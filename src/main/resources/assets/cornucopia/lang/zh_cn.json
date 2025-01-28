@@ -9,5 +9,6 @@
   "key.cornucopia.drop_cornucopia_contents": "丢弃丰饶角中的食物",
   "screen.cornucopia.cornucopia_item_title": "丰饶之角",
   "advancements.adventure.using_cornucopia.title": "丰饶...角?",
-  "advancements.adventure.using_cornucopia.description": "簇拥丰饶"
+  "advancements.adventure.using_cornucopia.description": "簇拥丰饶",
+  "cornucopia.config.life_threshold_value": "生命阈值"
 }

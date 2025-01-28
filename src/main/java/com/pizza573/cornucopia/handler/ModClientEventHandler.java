@@ -35,7 +35,7 @@ public class ModClientEventHandler
     @SubscribeEvent
     public static void propertyOverride(FMLClientSetupEvent event)
     {
-        // 添加自定义物品渲染
+        // 添加自定义物品渲染，通过 weight 切换丰饶角贴图
         ItemProperties.register(
                 ModItems.CORNUCOPIA.get(),
                 ResourceLocation.fromNamespaceAndPath(Cornucopia.MOD_ID, "weight"),

@@ -269,8 +269,7 @@ public final class CornucopiaContents implements TooltipComponent
         public void removeSingle(int index)
         {
             // 没有items
-            if (this.items.isEmpty()) {
-            } else {// 有
+            if (!this.items.isEmpty()) { // 有
                 // 获取到本体
                 ItemStack rawStack = this.items.get(index);
                 // 副本
