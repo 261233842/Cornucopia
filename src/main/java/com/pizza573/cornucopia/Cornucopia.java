@@ -28,17 +28,16 @@ public class Cornucopia
     {
         ModItems.REGISTER.register(modEventBus);
         ModCreativeTabs.REGISTER.register(modEventBus);
-        ModDataComponents.REGISTRAR.register(modEventBus);
-        modContainer.registerConfig(ModConfig.Type.COMMON,Config.CONFIG_SPEC);
+        ModDataComponents.REGISTER.register(modEventBus);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 
         // 如果是在客户端环境，调用 clientInit 方法
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            clientInit(modContainer); // 或者传入正确的 ModContainer 实例
-        }
+        if (FMLEnvironment.dist == Dist.CLIENT) clientInit(modContainer);
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void clientInit(ModContainer modContainer) {
+    private void clientInit(ModContainer modContainer)
+    {
         // This will use NeoForge's ConfigurationScreen to display this mod's configs
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
