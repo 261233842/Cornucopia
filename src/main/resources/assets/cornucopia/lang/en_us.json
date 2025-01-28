@@ -7,5 +7,7 @@
   "itemGroup.cornucopia": "Cornucopia",
   "key.categories.cornucopia": "Cornucopia",
   "key.cornucopia.drop_cornucopia_contents": "drop food from cornucopia",
-  "screen.cornucopia.cornucopia_item_title": "Cornucopia"
+  "screen.cornucopia.cornucopia_item_title": "Cornucopia",
+  "advancements.adventure.using_cornucopia.title": "Cornu...copia?",
+  "advancements.adventure.using_cornucopia.description": "Surrounded by abundance"
 }

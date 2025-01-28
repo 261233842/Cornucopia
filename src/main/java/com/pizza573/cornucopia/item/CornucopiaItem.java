@@ -5,6 +5,7 @@ import com.pizza573.cornucopia.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.init.ModDataComponents;
 import com.pizza573.cornucopia.util.FoodSelectHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.ModList;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +49,7 @@ public class CornucopiaItem extends Item
     public @NotNull Component getName(@NotNull ItemStack stack)
     {
         // 修改名称颜色为暗绿色
-        return Component.translatable(super.getName(stack).getString()).withStyle(ChatFormatting.DARK_GREEN);
+        return Component.translatable(super.getName(stack).getString()).withColor(Mth.color(0.133f, 0.545f, 0.133f));
     }
 
     // 供物品属性weight使用，类似boson的magicIngot，“使物品能够动态的切换贴图”
@@ -132,7 +134,6 @@ public class CornucopiaItem extends Item
     {
         ItemStack cornucopia = player.getItemInHand(usedHand);
         CornucopiaContents contents = cornucopia.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-
         // 判空
         if (contents.isEmpty()) return InteractionResultHolder.pass(cornucopia);
 
@@ -222,7 +223,9 @@ public class CornucopiaItem extends Item
             int foodValues = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
             // "容量权重"前端渲染修改
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", foodValues, 64 * 2/*乘以容量等级*/).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.description").withStyle(ChatFormatting.DARK_GREEN));
+            if(Screen.hasShiftDown()){
+                tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.description").withColor(Mth.color(0.133f, 0.545f, 0.133f)));
+            }
         }
     }
 
