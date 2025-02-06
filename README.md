@@ -9,7 +9,7 @@ get a Cornucopia not only by joining a world, but also by using a goat horn item
 
 ## The Way To Get Cornucopia
 
-- **New World Rewards**: When you join a new game world, the system will automatically give you a Cornucopia.
+- **New World Rewards**: The first meal is rewarded with a goat's horn.
 - **Goat Horn Conversion**: By right-clicking a goat horn filled with food, you can convert it into a cornucopia horn.
 
 ## Shortcut Key
@@ -38,7 +38,7 @@ get a Cornucopia not only by joining a world, but also by using a goat horn item
 
 ## 获取丰饶角的方法
 
-- **新世界奖励**：当您加入一个新的游戏世界时，系统将自动赠送一个丰饶角。
+- **新世界奖励**：首次进食会奖励一个山羊角。
 - **山羊角转换**：通过右键使用装满食物的山羊角，可以将其转换为丰饶角。
 
 ## 快捷键

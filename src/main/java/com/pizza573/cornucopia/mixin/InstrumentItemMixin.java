@@ -6,6 +6,7 @@ import com.pizza573.cornucopia.init.ModDataComponents;
 import com.pizza573.cornucopia.init.ModItems;
 import com.pizza573.cornucopia.item.components.CornucopiaContents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -34,6 +35,7 @@ import java.util.Optional;
 @Mixin(InstrumentItem.class)
 public class InstrumentItemMixin extends Item
 {
+    // 添加，不覆盖
     @Unique
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
 
@@ -45,11 +47,14 @@ public class InstrumentItemMixin extends Item
 
     // INVOKE 可以在调用 target 中对应的方法之前执行
     @Inject(method = "appendHoverText",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;getInstrument(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"))
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info){
+    public void appendHoverTextInject(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info){
         CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 128).withStyle(ChatFormatting.GRAY));
+            if (Screen.hasShiftDown()) {
+                tooltipComponents.add(Component.translatable("item.minecraft.goat_horn.description").withStyle(ChatFormatting.GRAY));
+            }
         }
     }
 

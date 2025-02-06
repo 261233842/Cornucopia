@@ -1,6 +1,5 @@
 package com.pizza573.cornucopia.handler;
 
-import com.pizza573.cornucopia.Config;
 import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.init.ModItems;
 import com.pizza573.cornucopia.util.FoodSelectHelper;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = Cornucopia.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
@@ -19,18 +17,6 @@ public class NeoforgeEventHandler
 {
     static byte i = 0;
     static boolean appleSkinIsLoaded = ModList.get().isLoaded("appleskin");
-
-    // 第一次进世界，给予CornucopiaItem
-    @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
-    {
-        if (event.getEntity() instanceof ServerPlayer player && !player.gameMode.isCreative()) {
-            if (Config.COMMON.loginWithCornucopia.get() && !player.getPersistentData().contains("HasJoinedBefore")) {
-                player.getPersistentData().putBoolean("HasJoinedBefore", true);
-                player.getInventory().add(new ItemStack(ModItems.CORNUCOPIA.get()));
-            }
-        }
-    }
 
     @SubscribeEvent
     public static void updateFoodProperties(PlayerTickEvent.Post event)
@@ -42,9 +28,9 @@ public class NeoforgeEventHandler
             if (cornucopia.getItem() == ModItems.CORNUCOPIA.get()) {
                 int suitableFoodIndex = FoodSelectHelper.getSuitableFoodIndex(player, cornucopia);
                 ItemStack suitableFood = FoodSelectHelper.getSingleFood(cornucopia, suitableFoodIndex);
-                System.out.println("suitableFood: "+suitableFood);
+//                System.out.println("合适的食物suitableFood: "+suitableFood);
                 FoodProperties foodProperties = suitableFood.getFoodProperties(player);
-                if(foodProperties!=null) System.out.println("nutrition: "+foodProperties.nutrition());
+//                if(foodProperties!=null) System.out.println("nutrition: "+foodProperties.nutrition());
                 cornucopia.set(DataComponents.FOOD, foodProperties);
             }
         }
