@@ -1,6 +1,6 @@
 # Cornucopia
 
-###### Compatible with AppleSkin mod from version 2.1.1 version!
+###### Compatible with AppleSkin mod from 2.1.1 version!
 
 ## Add Cornucopia
 

@@ -46,15 +46,14 @@ public class InstrumentItemMixin extends Item
     }
 
     // INVOKE 可以在调用 target 中对应的方法之前执行
-    @Inject(method = "appendHoverText",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;getInstrument(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"))
-    public void appendHoverTextInject(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info){
+    @Inject(method = "appendHoverText", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;getInstrument(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"))
+    public void appendHoverTextInject(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info)
+    {
         CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
             tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 128).withStyle(ChatFormatting.GRAY));
-            if (Screen.hasShiftDown()) {
-                tooltipComponents.add(Component.translatable("item.minecraft.goat_horn.description").withStyle(ChatFormatting.GRAY));
-            }
+            tooltipComponents.add(Component.translatable("item.minecraft.goat_horn.description").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -127,12 +126,12 @@ public class InstrumentItemMixin extends Item
 
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity livingEntity)
     {
-        CornucopiaContents cornucopiaContents=stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null && cornucopiaContents.weight().compareTo(Fraction.getFraction(2,1)) == 0) {
+        CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
+        if (cornucopiaContents != null && cornucopiaContents.weight().compareTo(Fraction.getFraction(2, 1)) == 0) {
             ItemStack cornucopiaItemStack = new ItemStack(ModItems.CORNUCOPIA.get());
-            if(Config.COMMON.enableClearFoods.get()){
+            if (Config.COMMON.enableClearFoods.get()) {
                 cornucopiaItemStack.set(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-            }else{
+            } else {
                 cornucopiaItemStack.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents);
             }
             return cornucopiaItemStack;
