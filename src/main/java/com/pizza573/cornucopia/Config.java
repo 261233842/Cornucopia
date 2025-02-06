@@ -18,16 +18,11 @@ public class Config
 
     public static class Common
     {
-        public final ModConfigSpec.BooleanValue loginWithCornucopia;
         public final ModConfigSpec.BooleanValue enableClearFoods;
         public final ModConfigSpec.IntValue lifeThresholdValue;
 
         public Common(ModConfigSpec.Builder builder)
         {
-            loginWithCornucopia = builder
-//                    .comment("加入世界自带丰饶角")
-                    .translation("cornucopia.config.login_with_cornucopia")
-                    .define("loginWithCornucopia", true);
             enableClearFoods = builder
 //                    .comment("转换为丰饶角后清空食物")
                     .translation("cornucopia.config.enable_clear_foods")
