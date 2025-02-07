@@ -1,7 +1,6 @@
 package com.pizza573.cornucopia.init;
 
 import com.pizza573.cornucopia.Cornucopia;
-import com.pizza573.cornucopia.enchantment.effect.Increment;
 import com.pizza573.cornucopia.item.components.CornucopiaContents;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,11 +23,4 @@ public class ModDataComponents
                     .networkSynchronized(CornucopiaContents.STREAM_CODEC)
                     .cacheEncoding()
     );
-
-    // enchantment effect component
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Increment>> INCREMENT =
-            ENCHANTMENT_COMPONENT_TYPES.register("increment",
-                    () -> DataComponentType.<Increment>builder().persistent(Increment.CODEC).build()
-            );
-
 }
