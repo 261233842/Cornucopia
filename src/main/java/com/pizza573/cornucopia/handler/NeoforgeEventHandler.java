@@ -21,6 +21,7 @@ public class NeoforgeEventHandler
     @SubscribeEvent
     public static void updateFoodProperties(PlayerTickEvent.Post event)
     {
+        // 每秒更新一次
         i %= 20;
         if (appleSkinIsLoaded && i++ == 0 && event.getEntity() instanceof ServerPlayer player) {
             ItemStack cornucopia = player.getMainHandItem();

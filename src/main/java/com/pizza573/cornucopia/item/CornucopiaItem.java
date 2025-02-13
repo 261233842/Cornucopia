@@ -31,7 +31,9 @@ import java.util.Optional;
 
 public class CornucopiaItem extends Item
 {
+    // static 变量，所有对象共享同一个静态字段值，示例：计数器、配置常量等。
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
+    private static final int REDUCE_TIME = 6; // 0.3s=6tick
     private int suitableFoodIndex;
     private ItemStack suitableFood = ItemStack.EMPTY;
 
@@ -168,7 +170,8 @@ public class CornucopiaItem extends Item
     public int getUseDuration(@NotNull ItemStack cornucopia, @NotNull LivingEntity entity)
     {
         FoodProperties foodProperties = suitableFood.getFoodProperties(entity);
-        return foodProperties != null ? foodProperties.eatDurationTicks() : 0;
+        // 一般食物的使用时间为1.6s，海带0.8s
+        return foodProperties != null ? foodProperties.eatDurationTicks() - REDUCE_TIME : 0;
     }
 
     // 是否显示bar条（耐久度bar、收纳袋容量bar）
@@ -226,7 +229,6 @@ public class CornucopiaItem extends Item
         return false;
     }
 
-    //    @OnlyIn(Dist.CLIENT)
     private void playRemoveOneSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
