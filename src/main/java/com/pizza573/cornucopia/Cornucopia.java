@@ -2,8 +2,11 @@ package com.pizza573.cornucopia;
 
 import com.pizza573.cornucopia.init.ModCreativeTabs;
 import com.pizza573.cornucopia.init.ModItems;
+import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.gui.ModListScreen;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -22,12 +25,23 @@ public class Cornucopia
 
     public Cornucopia()
     {
-        // todo ???Register the commonSetup method for modloading???
+        // 让forge知道此类有监听事件的方法（一般在主类上添加注解@Mod.EventBusSubscriber替代）
         MinecraftForge.EVENT_BUS.register(this);
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.REGISTER.register(modEventBus);
         ModCreativeTabs.REGISTER.register(modEventBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+
+        // 配置界面
+//        ModLoadingContext.get().registerExtensionPoint(
+//                ConfigScreenHandler.ConfigScreenFactory.class,
+//                () -> new ConfigScreenHandler.ConfigScreenFactory(
+//                        (mc, screen) -> {
+//                            ModListScreen
+//                        }
+//                )
+//        );
+        // modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 }
