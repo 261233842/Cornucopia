@@ -33,7 +33,8 @@ public class CornucopiaItem extends Item
 {
     // static 变量，所有对象共享同一个静态字段值，示例：计数器、配置常量等。
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
-    private static final int REDUCE_TIME = 6; // 0.3s=6tick
+    private static final int ITEM_NAME_COLOR= Mth.color(0.133f, 0.545f, 0.133f);// 暗绿色
+    private static final int REDUCE_TIME = 6; // 0.3s * 20tick/s = 6tick
     private int suitableFoodIndex;
     private ItemStack suitableFood = ItemStack.EMPTY;
 
@@ -46,8 +47,7 @@ public class CornucopiaItem extends Item
     @Override
     public @NotNull Component getName(@NotNull ItemStack stack)
     {
-        // 修改名称颜色为暗绿色
-        return Component.translatable(super.getName(stack).getString()).withColor(Mth.color(0.133f, 0.545f, 0.133f));
+        return Component.translatable(super.getName(stack).getString()).withColor(ITEM_NAME_COLOR);
     }
 
     // 供物品属性weight使用，类似boson的magicIngot，“使物品能够动态的切换贴图”
