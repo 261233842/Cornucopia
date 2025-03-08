@@ -6,7 +6,6 @@ import com.pizza573.cornucopia.init.ModDataComponents;
 import com.pizza573.cornucopia.init.ModItems;
 import com.pizza573.cornucopia.item.components.CornucopiaContents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -14,7 +13,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -33,12 +31,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Mixin(InstrumentItem.class)
-public class InstrumentItemMixin extends Item
+public abstract class InstrumentItemMixin extends Item
 {
     // 添加，不覆盖
     @Unique
     private static final int BAR_COLOR = Mth.color(0.4F, 0.4F, 1.0F);
-
 
     public InstrumentItemMixin(Properties properties)
     {
@@ -164,16 +161,6 @@ public class InstrumentItemMixin extends Item
     {
         return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP)
                 ? Optional.ofNullable(stack.get(ModDataComponents.CORNUCOPIA_CONTENTS)).map(CornucopiaTooltip::new) : Optional.empty();
-    }
-
-    @Override
-    public void onDestroyed(ItemEntity itemEntity)
-    {
-        CornucopiaContents cornucopiaContents = itemEntity.getItem().get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null) {
-            itemEntity.getItem().set(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-            ItemUtils.onContainerDestroyed(itemEntity, cornucopiaContents.itemsCopy());
-        }
     }
 
     public boolean canFitInsideContainerItems()

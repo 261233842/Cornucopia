@@ -6,12 +6,12 @@ license = "${mod_license}"
 modId = "${mod_id}" #mandatory
 version = "${mod_version}" #mandatory
 displayName = "${mod_name}" #mandatory
-#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 displayURL="https://github.com/261233842/Cornucopia/" #optional
 logoFile= "logo.png" #optional
 authors = "${mod_authors}" #optional
 description = '''${mod_description}'''
 
+# neoforge configs mixin here,forge doesn't
 [[mixins]]
 config = "${mod_id}.mixins.json"
 

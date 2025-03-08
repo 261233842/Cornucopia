@@ -31,7 +31,7 @@ public final class CornucopiaContents implements TooltipComponent
     // 用于物品存储的相关数据
     final List<ItemStack> items;
     final Fraction weight;
-    final int maxSize;
+    final int maxSize;// 后续要用附魔修改，不能为 static
 
     // 内部使用
     CornucopiaContents(List<ItemStack> items, Fraction weight, int maxSize)
@@ -173,17 +173,15 @@ public final class CornucopiaContents implements TooltipComponent
 
         private int findStackableIndex(ItemStack stack)
         {
-            if (!stack.isStackable()) {
-                return -1;
-            } else {
+            if (stack.isStackable()) {
                 for (int i = 0; i < this.items.size(); ++i) {
                     if (ItemStack.isSameItemSameComponents(this.items.get(i), stack) && this.items.get(i).getCount() < 64) {
                         return i;
                     }
                 }
 
-                return -1;
             }
+            return -1;
         }
 
         private int getMaxAmountToAdd(ItemStack stack)
