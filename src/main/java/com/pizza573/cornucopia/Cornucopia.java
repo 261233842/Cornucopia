@@ -25,8 +25,6 @@ public class Cornucopia
 
     public Cornucopia()
     {
-        // 让forge知道此类有监听事件的方法（一般在主类上添加注解@Mod.EventBusSubscriber替代）
-        MinecraftForge.EVENT_BUS.register(this);
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.REGISTER.register(modEventBus);

@@ -119,7 +119,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 mixin {
     // MixinGradle Settings
     config 'cornucopia.mixins.json'
-
     debug.verbose = true
     debug.export = true
 }
