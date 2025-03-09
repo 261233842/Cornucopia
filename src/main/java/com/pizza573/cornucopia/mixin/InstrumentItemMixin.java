@@ -1,10 +1,12 @@
 package com.pizza573.cornucopia.mixin;
 
+import com.pizza573.cornucopia.Config;
 import com.pizza573.cornucopia.init.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -29,9 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-// todo 【实现存储功能】
 @Mixin(InstrumentItem.class)
-public class InstrumentItemMixin extends Item
+public abstract class InstrumentItemMixin extends Item
 {
     // private static final String TAG_ITEMS = "Items";
     @Unique
@@ -60,7 +61,7 @@ public class InstrumentItemMixin extends Item
             if (k == 0) {
                 return 0;
             } else {
-                ListTag listtag = compoundtag.getList("Items", 10);
+                ListTag listtag = compoundtag.getList("Items", Tag.TAG_COMPOUND);
                 Optional<CompoundTag> optional = mixin_getMatchingItem(pInsertedStack, listtag);// 寻找拥有相同tag的Item（匹配的itemStack）
                 if (optional.isPresent()) {// 找到匹配的物品
                     CompoundTag compoundTag1 = optional.get();// compoundTag1
@@ -114,7 +115,7 @@ public class InstrumentItemMixin extends Item
         } else {
             if ((pStack.is(Items.BEEHIVE) || pStack.is(Items.BEE_NEST)) && pStack.hasTag()) {
                 CompoundTag compoundtag = BlockItem.getBlockEntityData(pStack);
-                if (compoundtag != null && !compoundtag.getList("Bees", 10).isEmpty()) {
+                if (compoundtag != null && !compoundtag.getList("Bees", Tag.TAG_COMPOUND).isEmpty()) {
                     return 64;
                 }
             }
@@ -136,7 +137,7 @@ public class InstrumentItemMixin extends Item
         if (!compoundtag.contains("Items")) {
             return Optional.empty();
         } else {
-            ListTag listtag = compoundtag.getList("Items", 10);
+            ListTag listtag = compoundtag.getList("Items", Tag.TAG_COMPOUND);
             if (listtag.isEmpty()) {
                 return Optional.empty();
             } else {
@@ -160,7 +161,7 @@ public class InstrumentItemMixin extends Item
         if (compoundtag == null) {
             return Stream.empty();
         } else {
-            ListTag listtag = compoundtag.getList("Items", 10);
+            ListTag listtag = compoundtag.getList("Items", Tag.TAG_COMPOUND);
             return listtag.stream().map(CompoundTag.class::cast).map(ItemStack::of);
         }
     }
@@ -218,8 +219,18 @@ public class InstrumentItemMixin extends Item
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, @NotNull Level level, @NotNull LivingEntity livingEntity)
     {
         if (mixin_getContentWeight(stack) == MAX_WEIGHT) {// 装满食物
-            // todo 适配“是否清空食物”配置
             ItemStack cornucopiaItemStack = new ItemStack(ModItems.CORNUCOPIA.get());
+            if(!Config.COMMON.enableClearFoods.get()){
+                CompoundTag compoundTag = stack.getTag();
+                if (compoundTag != null) {
+                    ListTag listTag = compoundTag.getList("Items", Tag.TAG_COMPOUND);
+                    cornucopiaItemStack.getOrCreateTag().put("Items", listTag);
+
+//                    System.out.println("nbt transformed");
+//                    System.out.println(cornucopiaItemStack.getTag());
+                }
+            }
+
             return cornucopiaItemStack;
         }
 
