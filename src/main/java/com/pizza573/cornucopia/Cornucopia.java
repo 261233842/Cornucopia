@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Cornucopia.MOD_ID)

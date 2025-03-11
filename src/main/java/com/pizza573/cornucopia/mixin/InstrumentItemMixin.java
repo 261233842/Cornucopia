@@ -110,18 +110,7 @@ public abstract class InstrumentItemMixin extends Item
     @Unique
     private static int mixin_getWeight(ItemStack pStack)
     {
-        if (pStack.is(Items.BUNDLE)) {
-            return 4 + mixin_getContentWeight(pStack);
-        } else {
-            if ((pStack.is(Items.BEEHIVE) || pStack.is(Items.BEE_NEST)) && pStack.hasTag()) {
-                CompoundTag compoundtag = BlockItem.getBlockEntityData(pStack);
-                if (compoundtag != null && !compoundtag.getList("Bees", Tag.TAG_COMPOUND).isEmpty()) {
-                    return 64;
-                }
-            }
-
-            return 64 / pStack.getMaxStackSize();
-        }
+        return 64 / pStack.getMaxStackSize();
     }
 
     @Unique
@@ -131,7 +120,7 @@ public abstract class InstrumentItemMixin extends Item
     }
 
     @Unique
-    private static Optional<ItemStack> mixin_removeOne(ItemStack pStack)
+    private static Optional<ItemStack> mixin_removeOneStack(ItemStack pStack)
     {
         CompoundTag compoundtag = pStack.getOrCreateTag();
         if (!compoundtag.contains("Items")) {
@@ -141,7 +130,6 @@ public abstract class InstrumentItemMixin extends Item
             if (listtag.isEmpty()) {
                 return Optional.empty();
             } else {
-                int i = 0;
                 CompoundTag compoundtag1 = listtag.getCompound(0);
                 ItemStack itemstack = ItemStack.of(compoundtag1);
                 listtag.remove(0);
@@ -176,10 +164,10 @@ public abstract class InstrumentItemMixin extends Item
             ItemStack itemstack = pSlot.getItem();
             if (itemstack.isEmpty()) {
                 this.mixin_playRemoveOneSound(pPlayer);
-                mixin_removeOne(pStack).ifPresent((itemStack) -> {
+                mixin_removeOneStack(pStack).ifPresent((itemStack) -> {
                     mixin_add(pStack, pSlot.safeInsert(itemStack));
                 });
-            } else if (itemstack.getItem().canFitInsideContainerItems() && itemstack.getFoodProperties(pPlayer) != null) {
+            } else if (itemstack.getItem().canFitInsideContainerItems() && itemstack.getFoodProperties(pPlayer) != null) {// 食物判断
                 int i = (MAX_WEIGHT - mixin_getContentWeight(pStack)) / mixin_getWeight(itemstack);
                 int j = mixin_add(pStack, pSlot.safeTake(itemstack.getCount(), i, pPlayer));
                 if (j > 0) {
@@ -197,11 +185,11 @@ public abstract class InstrumentItemMixin extends Item
         if (pStack.getCount() != 1) return false;
         if (pAction == ClickAction.SECONDARY && pSlot.allowModification(pPlayer)) {
             if (pOther.isEmpty()) {
-                mixin_removeOne(pStack).ifPresent((itemStack) -> {
+                mixin_removeOneStack(pStack).ifPresent((itemStack) -> {
                     this.mixin_playRemoveOneSound(pPlayer);
                     pAccess.set(itemStack);
                 });
-            } else if (pOther.getFoodProperties(pPlayer) != null) {
+            } else if (pOther.getFoodProperties(pPlayer) != null) {// 食物判断
                 int i = mixin_add(pStack, pOther);
                 if (i > 0) {
                     this.mixin_playInsertSound(pPlayer);
@@ -220,7 +208,7 @@ public abstract class InstrumentItemMixin extends Item
     {
         if (mixin_getContentWeight(stack) == MAX_WEIGHT) {// 装满食物
             ItemStack cornucopiaItemStack = new ItemStack(ModItems.CORNUCOPIA.get());
-            if(!Config.COMMON.enableClearFoods.get()){
+            if (!Config.COMMON.enableClearFoods.get()) {
                 CompoundTag compoundTag = stack.getTag();
                 if (compoundTag != null) {
                     ListTag listTag = compoundTag.getList("Items", Tag.TAG_COMPOUND);
