@@ -15,7 +15,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
-//添加了@EventBusSubscriber注释就无需在主类注册
+// 添加了 @EventBusSubscriber 注释就无需在主类注册
 @EventBusSubscriber(modid = Cornucopia.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ModClientEventHandler
 {
@@ -25,17 +25,15 @@ public class ModClientEventHandler
         event.register(ModKeys.DROP_CORNUCOPIA_CONTENTS);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent // 注册提示框
     public static void registerTooltipComponent(RegisterClientTooltipComponentFactoriesEvent event)
     {
-        // 注册提示框
         event.register(CornucopiaTooltip.class, ClientCornucopiaTooltip::new);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent // 添加自定义物品渲染，通过 weight 切换丰饶角贴图
     public static void propertyOverride(FMLClientSetupEvent event)
     {
-        // 添加自定义物品渲染，通过 weight 切换丰饶角贴图
         ItemProperties.register(
                 ModItems.CORNUCOPIA.get(),
                 ResourceLocation.fromNamespaceAndPath(Cornucopia.MOD_ID, "weight"),

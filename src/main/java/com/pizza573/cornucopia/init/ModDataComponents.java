@@ -11,16 +11,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModDataComponents
 {
     public static final DeferredRegister.DataComponents REGISTER = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Cornucopia.MOD_ID);
-    public static final DeferredRegister<DataComponentType<?>> ENCHANTMENT_COMPONENT_TYPES = DeferredRegister.create(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, "examplemod");
+    public static final DeferredRegister<DataComponentType<?>> ENCHANTMENT_COMPONENT_TYPES = DeferredRegister.create(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, Cornucopia.MOD_ID);
 
     // data component
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<CornucopiaContents>> CORNUCOPIA_CONTENTS = REGISTER.registerComponentType(
             "cornucopia_contents",
             builder -> builder
-                    // The codec to read/write the data to disk
-                    .persistent(CornucopiaContents.CODEC)
-                    // The codec to read/write the data across the network
-                    .networkSynchronized(CornucopiaContents.STREAM_CODEC)
+                    .persistent(CornucopiaContents.CODEC) // The codec to read/write the data to disk
+                    .networkSynchronized(CornucopiaContents.STREAM_CODEC) // The codec to read/write the data across the network
                     .cacheEncoding()
     );
 }

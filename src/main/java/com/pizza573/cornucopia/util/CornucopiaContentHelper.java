@@ -11,24 +11,24 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-public class FoodSelectHelper
+public class CornucopiaContentHelper
 {
-    public static void removeSingleFood(ItemStack cornucopia, int index)
+    public static void removeOneItem(ItemStack cornucopia, int index)
     {
         CornucopiaContents cornucopiaContents = cornucopia.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-            cornucopiaContents$mutable.removeSingle(index);
+            cornucopiaContents$mutable.removeOneItem(index);
             cornucopia.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents$mutable.toImmutable());
         }
     }
 
-    public static ItemStack getSingleFood(ItemStack cornucopia, int index)
+    public static ItemStack getItemStackCopy(ItemStack cornucopia, int index)
     {
         CornucopiaContents cornucopiaContents = cornucopia.get(ModDataComponents.CORNUCOPIA_CONTENTS);
         if (cornucopiaContents != null) {
             CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-            ItemStack food = cornucopiaContents$mutable.getOne(index);
+            ItemStack food = cornucopiaContents$mutable.getItemStackCopy(index);
             cornucopia.set(ModDataComponents.CORNUCOPIA_CONTENTS, cornucopiaContents$mutable.toImmutable());
             return food;
         }
@@ -64,13 +64,13 @@ public class FoodSelectHelper
 
             if (foodProperties == null) continue;
 
-            // 更新（附魔）金苹果索引
+            // switch case 不支持布尔值判断
             if (item == Items.ENCHANTED_GOLDEN_APPLE) enchantedGoldenApple_i = i;
-            else if (item == Items.GOLDEN_APPLE) goldenApple_i = i;
-            // 更新 canAlwaysEat 索引
+            if (item == Items.GOLDEN_APPLE) goldenApple_i = i;
             if (foodProperties.canAlwaysEat()) canAlwaysEat_i = i;
 
-            if (player.getFoodData().needsFood() && !isGoldenApple(foodItemStack)) {// 饥饿值非满，不能吃（附魔）金苹果
+            // 饥饿值非满，不能吃（附魔）金苹果
+            if (player.getFoodData().needsFood() && !isGoldenApple(foodItemStack)) {
                 // 更新尽量吃饱的食物的索引
                 int aft_nutrition = foodProperties.nutrition();
                 int aft_score = Math.abs(20 - (foodLevel + aft_nutrition));

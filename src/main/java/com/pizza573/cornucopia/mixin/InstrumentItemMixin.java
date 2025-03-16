@@ -42,18 +42,6 @@ public abstract class InstrumentItemMixin extends Item
         super(properties);
     }
 
-    // INVOKE 可以在调用 target 中对应的方法之前执行
-    @Inject(method = "appendHoverText", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;getInstrument(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"))
-    public void appendHoverTextInject(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info)
-    {
-        CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
-        if (cornucopiaContents != null) {
-            int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
-            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 128).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.translatable("item.minecraft.goat_horn.description").withStyle(ChatFormatting.GRAY));
-        }
-    }
-
     @Override
     public boolean overrideStackedOnOther(ItemStack stack, @NotNull Slot slot, @NotNull ClickAction action, @NotNull Player player)
     {
@@ -69,14 +57,14 @@ public abstract class InstrumentItemMixin extends Item
                 if (other.isEmpty()) {
                     this.mixin_playRemoveOneSound(player);
                     // 移除单个种类的物品
-                    ItemStack itemstack1 = cornucopiaContents$mutable.removeOne();
+                    ItemStack itemstack1 = cornucopiaContents$mutable.removeOneStack();
                     if (itemstack1 != null) {
                         // 存入物品到slot，return未存入的
                         ItemStack itemstack2 = slot.safeInsert(itemstack1);
                         cornucopiaContents$mutable.tryInsert(itemstack2);
                     }
                     // 只能存入food（参考 Item 的 finishUsingItem(...)，最初调用的比较底层）
-                } else if (other.getItem().canFitInsideContainerItems() && other.getFoodProperties(player) != null) {
+                } else if (other.getItem().canFitInsideContainerItems() && other.getFoodProperties(player) != null) {// 食物判断
                     int i = cornucopiaContents$mutable.tryTransfer(slot, player);
                     if (i > 0) {
                         this.mixin_playInsertSound(player);
@@ -100,13 +88,12 @@ public abstract class InstrumentItemMixin extends Item
             } else {
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
                 if (other.isEmpty()) {
-                    ItemStack itemstack = cornucopiaContents$mutable.removeOne();
+                    ItemStack itemstack = cornucopiaContents$mutable.removeOneStack();
                     if (itemstack != null) {
                         this.mixin_playRemoveOneSound(player);
                         access.set(itemstack);
                     }
-                    // 只能存入food（参考 Item 的 finishUsingItem(...)，最初调用的比较底层）
-                } else if (other.getFoodProperties(player) != null) {
+                } else if (other.getFoodProperties(player) != null) {// 食物判断
                     int i = cornucopiaContents$mutable.tryInsert(other);
                     if (i > 0) {
                         this.mixin_playInsertSound(player);
@@ -161,6 +148,18 @@ public abstract class InstrumentItemMixin extends Item
     {
         return !stack.has(DataComponents.HIDE_TOOLTIP) && !stack.has(DataComponents.HIDE_ADDITIONAL_TOOLTIP)
                 ? Optional.ofNullable(stack.get(ModDataComponents.CORNUCOPIA_CONTENTS)).map(CornucopiaTooltip::new) : Optional.empty();
+    }
+
+    // INVOKE 可以在调用 target 中对应的方法之前执行
+    @Inject(method = "appendHoverText", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/InstrumentItem;getInstrument(Lnet/minecraft/world/item/ItemStack;)Ljava/util/Optional;"))
+    public void appendHoverTextInject(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag, CallbackInfo info)
+    {
+        CornucopiaContents cornucopiaContents = stack.get(ModDataComponents.CORNUCOPIA_CONTENTS);
+        if (cornucopiaContents != null) {
+            int i = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
+            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", i, 128).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("item.minecraft.goat_horn.description").withStyle(ChatFormatting.GRAY));
+        }
     }
 
     public boolean canFitInsideContainerItems()

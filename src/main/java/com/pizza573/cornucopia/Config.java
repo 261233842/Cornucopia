@@ -19,17 +19,22 @@ public class Config
     public static class Common
     {
         public final ModConfigSpec.BooleanValue enableClearFoods;
+        public final ModConfigSpec.BooleanValue enableContentBar;
         public final ModConfigSpec.IntValue lifeThresholdValue;
 
         public Common(ModConfigSpec.Builder builder)
         {
             enableClearFoods = builder
 //                    .comment("转换为丰饶角后清空食物")
-                    .translation("cornucopia.config.enable_clear_foods")
+                    .translation("config.cornucopia.enable_clear_foods")
                     .define("enableClearFoods", false);
+            enableContentBar=builder
+//                    .comment("显示食物内容条")
+                    .translation("config.cornucopia.enable_content_bar")
+                    .define("enableContentBar", false);
             lifeThresholdValue=builder
 //                    .comment("生命值低于多少时自动转换")
-                    .translation("cornucopia.config.life_threshold_value")
+                    .translation("config.cornucopia.life_threshold_value")
                     .defineInRange("lifeThresholdValue", 10, 1, 19);
         }
     }

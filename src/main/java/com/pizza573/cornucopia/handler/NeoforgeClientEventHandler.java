@@ -19,8 +19,9 @@ public class NeoforgeClientEventHandler
     {
         while (ModKeys.DROP_CORNUCOPIA_CONTENTS.consumeClick()) {
             if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.getMainHandItem().getItem() instanceof CornucopiaItem) {
-                // 发包到服务器处理
-                PacketDistributor.sendToServer(new ServerBoundDropCornucopiaContentsPacket("ServerBoundDropCornucopiaContentsPacket发包到服务器"));
+                PacketDistributor.sendToServer(
+                        new ServerBoundDropCornucopiaContentsPacket("ServerBoundDropCornucopiaContentsPacket 发包到服务器")
+                );
             }
         }
     }

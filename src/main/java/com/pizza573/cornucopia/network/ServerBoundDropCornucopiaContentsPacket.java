@@ -19,12 +19,12 @@ import org.jetbrains.annotations.NotNull;
 public record ServerBoundDropCornucopiaContentsPacket(String message) implements CustomPacketPayload
 {
     public static final CustomPacketPayload.Type<ServerBoundDropCornucopiaContentsPacket> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Cornucopia.MOD_ID, "quit_cornucopia_contents_packet"));
-    // 编写发包用的数据流
+
     public static final StreamCodec<ByteBuf, ServerBoundDropCornucopiaContentsPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8,
             ServerBoundDropCornucopiaContentsPacket::message,
             ServerBoundDropCornucopiaContentsPacket::new
-    );
+    ); // 编写发包用的数据流
 
     // 接收客户端发来的包
     public static void handle(final ServerBoundDropCornucopiaContentsPacket packet, final IPayloadContext context)
@@ -34,8 +34,7 @@ public record ServerBoundDropCornucopiaContentsPacket(String message) implements
             ItemStack mainHandItem = player.getMainHandItem();
             if (dropContents(mainHandItem, player)) {
                 playDropContentsSound(player);
-                // 更新玩家统计数据
-                player.awardStat(Stats.ITEM_USED.get(mainHandItem.getItem()));
+                player.awardStat(Stats.ITEM_USED.get(mainHandItem.getItem())); // 更新玩家统计数据
             }
         }
     }
