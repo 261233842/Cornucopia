@@ -24,6 +24,5 @@ public class ModItemTagsProvider extends ItemTagsProvider
     protected void addTags(HolderLookup.Provider provider)
     {
         tag(ModTags.CORNUCOPIA).add(ModItems.CORNUCOPIA.get());
-        tag(ModTags.CORNUCOPIA_ENCHANTABLE).addTag(ModTags.CORNUCOPIA);
     }
 }

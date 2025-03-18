@@ -17,7 +17,9 @@
   "advancements.husbandry.using_cornucopia.title": "豐饒...角？",
   "advancements.husbandry.using_cornucopia.description": "簇擁豐饒",
   "advancements.husbandry.yummy.title":"嗯?",
-
   "advancements.husbandry.yummy.description":"好吃，再來一個",
-  "enchantment.cornucopia.capacity": "容量"
+
+  "enchantment.cornucopia.capacity": "容量",
+  "enchantment.cornucopia.nutrition": "營養",
+  "enchantment.cornucopia.copious": "豐饒"
 }

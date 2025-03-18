@@ -19,5 +19,7 @@
   "advancements.husbandry.yummy.title":"嗯?",
   "advancements.husbandry.yummy.description":"好吃，再来一个",
 
-  "enchantment.cornucopia.capacity": "容量"
+  "enchantment.cornucopia.capacity": "容量",
+  "enchantment.cornucopia.nutrition": "营养",
+  "enchantment.cornucopia.copious": "丰饶"
 }

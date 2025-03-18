@@ -19,5 +19,7 @@
   "advancements.husbandry.yummy.title":"What?",
   "advancements.husbandry.yummy.description":"Yummy, one more",
 
-  "enchantment.cornucopia.capacity": "Capacity"
+  "enchantment.cornucopia.capacity": "Capacity",
+  "enchantment.cornucopia.nutrition": "Nutrition",
+  "enchantment.cornucopia.copious": "Copious"
 }

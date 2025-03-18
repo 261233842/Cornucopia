@@ -35,4 +35,18 @@ public class ModDataComponents
                     .persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.EQUIPMENT).listOf()) // todo 第二个 ENCHANTED_DAMAGE
                     .build()
     );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> NUTRITION = ENCHANTMENT_EFFECT_COMPONENT_TYPES.register(
+            "nutrition",
+            () -> DataComponentType.<List<ConditionalEffect<EnchantmentValueEffect>>>builder()
+                    .persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.EQUIPMENT).listOf()) // todo 第二个 ENCHANTED_DAMAGE
+                    .build()
+    );
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>>> COPIOUS = ENCHANTMENT_EFFECT_COMPONENT_TYPES.register(
+            "copious",
+            () -> DataComponentType.<List<ConditionalEffect<EnchantmentValueEffect>>>builder()
+                    .persistent(ConditionalEffect.codec(EnchantmentValueEffect.CODEC, LootContextParamSets.EQUIPMENT).listOf()) // todo 第二个 ENCHANTED_DAMAGE
+                    .build()
+    );
 }
