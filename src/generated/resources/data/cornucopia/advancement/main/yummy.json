@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "criteria": {
+    "consumed_item": {
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.husbandry.yummy.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:goat_horn"
+    },
+    "title": {
+      "translate": "advancements.husbandry.yummy.title"
+    }
+  },
+  "requirements": [
+    [
+      "consumed_item"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "cornucopia:main/one_goat_horn"
+    ]
+  },
+  "sends_telemetry_event": true
+}

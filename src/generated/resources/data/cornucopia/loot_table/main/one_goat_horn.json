@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:empty",
+  "functions": [
+    {
+      "add": false,
+      "count": 1.0,
+      "function": "minecraft:set_count"
+    }
+  ],
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:goat_horn"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "cornucopia:main/one_goat_horn"
+}

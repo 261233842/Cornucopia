@@ -1,8 +1,8 @@
 package com.pizza573.cornucopia;
 
-import com.pizza573.cornucopia.init.ModDataComponents;
-import com.pizza573.cornucopia.init.ModCreativeTabs;
-import com.pizza573.cornucopia.init.ModItems;
+import com.pizza573.cornucopia.common.registry.ModDataComponents;
+import com.pizza573.cornucopia.common.registry.ModCreativeTabs;
+import com.pizza573.cornucopia.common.registry.ModItems;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.config.ModConfig;
@@ -29,6 +29,7 @@ public class Cornucopia
         ModItems.REGISTER.register(modEventBus);
         ModCreativeTabs.REGISTER.register(modEventBus);
         ModDataComponents.REGISTER.register(modEventBus);
+        ModDataComponents.ENCHANTMENT_EFFECT_COMPONENT_TYPES.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 
         // 如果是在客户端环境，调用 clientInit 方法

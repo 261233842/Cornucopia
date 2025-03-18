@@ -1,6 +1,6 @@
 package com.pizza573.cornucopia.client.screens.tooltip;
 
-import com.pizza573.cornucopia.item.components.CornucopiaContents;
+import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

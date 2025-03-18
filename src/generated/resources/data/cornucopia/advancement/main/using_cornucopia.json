@@ -1,0 +1,44 @@
+{
+  "parent": "cornucopia:main/yummy",
+  "criteria": {
+    "using_cornucopia": {
+      "conditions": {
+        "item": {
+          "items": "cornucopia:cornucopia"
+        },
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {}
+          }
+        ]
+      },
+      "trigger": "minecraft:using_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.husbandry.using_cornucopia.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "cornucopia:creative_tab_display"
+    },
+    "title": {
+      "translate": "advancements.husbandry.using_cornucopia.title"
+    }
+  },
+  "requirements": [
+    [
+      "using_cornucopia"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "cornucopia:main/three_golden_apple"
+    ]
+  },
+  "sends_telemetry_event": true
+}
