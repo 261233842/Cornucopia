@@ -5,10 +5,13 @@ import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
 import com.pizza573.cornucopia.common.util.CornucopiaContentHelper;
+import com.pizza573.cornucopia.data.enchantment.ModEnchantments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -23,6 +26,8 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
@@ -35,13 +40,28 @@ public class CornucopiaItem extends Item
     private static final int COPIOUS_COLOR = Mth.color(0.133f, 0.545f, 0.133f);// 暗绿色
     private static final int REDUCE_TIME = 6; // 6tick = 0.3s * 20tick/s
     private static final int LEAST_TIME = 2;
-    // todo 使用 suitableFood record类替代
+    private static final int INIT_SIZE = 128;
     private int suitableFoodIndex;
     private ItemStack suitableFood = ItemStack.EMPTY;
 
     public CornucopiaItem(Properties properties)
     {
         super(properties);
+    }
+
+    public static int getMaxSize(ItemStack stack)
+    {
+        int level = 0;
+        ItemEnchantments itemenchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY); // 获得物品的所有附魔
+
+        for (Holder<Enchantment> holder : itemenchantments.keySet()) {
+            ResourceKey<Enchantment> enchantmentKey = holder.getKey();
+            if (enchantmentKey != null && enchantmentKey.isFor(ModEnchantments.CAPACITY.registryKey())) {
+                level = itemenchantments.getLevel(holder);
+            }
+        }
+
+        return level * 64 + INIT_SIZE;
     }
 
     @Override
@@ -54,8 +74,8 @@ public class CornucopiaItem extends Item
     public static float getWeightDisplay(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        // todo 兼容容量附魔
-        return cornucopiaContents.weight().floatValue() / 2f/*除以附魔等级*/;
+        int foodValues = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
+        return (float) foodValues / getMaxSize(stack);
     }
 
     @Override
@@ -70,7 +90,7 @@ public class CornucopiaItem extends Item
             } else {
                 ItemStack other = slot.getItem();
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-
+                cornucopiaContents$mutable.setMaxSize(getMaxSize(stack));// 刷新容量
                 if (other.isEmpty()) {
 //                    System.out.println("remove one type food: " + other.getItem());
                     this.playRemoveOneSound(player);
@@ -101,6 +121,7 @@ public class CornucopiaItem extends Item
                 return false;
             } else {
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
+                cornucopiaContents$mutable.setMaxSize(getMaxSize(stack));// 刷新容量
                 if (other.isEmpty()) {
                     ItemStack itemstack = cornucopiaContents$mutable.removeOneStack();
                     if (itemstack != null) {
@@ -138,7 +159,6 @@ public class CornucopiaItem extends Item
         // 吃食物
         if (player.canEat(foodProperties != null && foodProperties.canAlwaysEat())) {
             player.startUsingItem(usedHand); // 告诉系统开始使用物品
-//            cornucopia.set(DataComponents.ENCHANTMENTS, ModEnchantments.CAPACITY);
             return InteractionResultHolder.consume(cornucopia);
         } else {
             return InteractionResultHolder.fail(cornucopia);
@@ -168,6 +188,18 @@ public class CornucopiaItem extends Item
     }
 
     // 杂项 Start
+    @Override
+    public boolean isEnchantable(@NotNull ItemStack stack)
+    {
+        return true;
+    }
+
+    @Override
+    public int getEnchantmentValue(@NotNull ItemStack stack)
+    {
+        return 30;
+    }
+
     // 是否显示 bar 条（耐久度 bar 、收纳袋容量 bar）
     @Override
     public boolean isBarVisible(@NotNull ItemStack stack)
@@ -184,8 +216,10 @@ public class CornucopiaItem extends Item
     public int getBarWidth(ItemStack stack)
     {
         CornucopiaContents cornucopiaContents = stack.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
-        // todo 兼容容量附魔
-        return Math.min(1 + Mth.mulAndTruncate(cornucopiaContents.weight(), 12 / 2/*除以容量附魔等级*/), 13); // 重量*12+1并向下取整，再取其和13的最小值
+        int foodValues = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
+        Fraction proportion = Fraction.getFraction((double) foodValues / getMaxSize(stack));
+
+        return Math.max(1,Mth.mulAndTruncate(proportion, 13));
     }
 
     @Override
@@ -214,7 +248,7 @@ public class CornucopiaItem extends Item
             // weight()的分子*64/weight()的分母 -> 向下取整
             int foodValues = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
             // "容量权重"前端渲染修改
-            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", foodValues, 64 * 2/*乘以容量等级*/).withStyle(ChatFormatting.GRAY));
+            tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.fullness", foodValues, getMaxSize(stack)).withStyle(ChatFormatting.GRAY));
             if (Screen.hasShiftDown()) {
                 tooltipComponents.add(Component.translatable("item.minecraft.cornucopia.description").withColor(COPIOUS_COLOR));
             }

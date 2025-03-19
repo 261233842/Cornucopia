@@ -2,7 +2,6 @@ package com.pizza573.cornucopia.data.enchantment;
 
 import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
-import com.pizza573.cornucopia.common.registry.ModItems;
 import com.pizza573.cornucopia.common.tag.ModTags;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -36,14 +35,11 @@ public class ModEnchantments
                                 items.getOrThrow(ModTags.CORNUCOPIA),
                                 5,
                                 2,
-                                Enchantment.dynamicCost(15, 9),
-                                Enchantment.dynamicCost(50, 8),
-                                4,
+                                Enchantment.dynamicCost(5, 8),
+                                Enchantment.dynamicCost(55, 8),
+                                2,
                                 EquipmentSlotGroup.MAINHAND
                         )
-                ).withEffect(
-                        ModDataComponents.CAPACITY.get(),
-                        new AddValue(LevelBasedValue.perLevel(64.0F, 64.0F))
                 )
         );
 

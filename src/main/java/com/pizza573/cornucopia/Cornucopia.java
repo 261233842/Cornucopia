@@ -22,7 +22,7 @@ import net.neoforged.fml.common.Mod;
 public class Cornucopia
 {
     public static final String MOD_ID = "cornucopia";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public Cornucopia(IEventBus modEventBus, ModContainer modContainer)
     {

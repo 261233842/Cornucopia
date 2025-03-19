@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 public class ModTags
 {
     public static final TagKey<Item> CORNUCOPIA = modItemTag("tools/cornucopia"); // Cornucopia items for game logic.
+    public static final TagKey<Item> ENCHANTABLE_CORNUCOPIA = modItemTag("enchantable/cornucopia");
 
     private static TagKey<Item> modItemTag(String path) {
         return ItemTags.create(ResourceLocation.fromNamespaceAndPath(Cornucopia.MOD_ID, path));

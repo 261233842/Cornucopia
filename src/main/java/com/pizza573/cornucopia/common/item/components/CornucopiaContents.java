@@ -23,6 +23,7 @@ public final class CornucopiaContents implements TooltipComponent
 {
     public static final CornucopiaContents EMPTY = new CornucopiaContents(List.of());
     private static final int NO_STACK_INDEX = -1;
+    private static final int INIT_SIZE = 128;
     public static final Codec<CornucopiaContents> CODEC;// The codec to read/write the data to disk
     public static final StreamCodec<RegistryFriendlyByteBuf, CornucopiaContents> STREAM_CODEC;// The codec to read/write the data across the network
     // 用于物品存储的相关数据
@@ -30,14 +31,12 @@ public final class CornucopiaContents implements TooltipComponent
     private final Fraction weight;
     private final int maxSize;// 后续要用附魔修改，不能为 static
 
-    // 供外部使用（大部分情况）
+    // 初始化使用
     public CornucopiaContents(List<ItemStack> items)
     {
-        // 默认容量 128
-        this(items, computeContentWeight(items), 128);
+        this(items, computeContentWeight(items), INIT_SIZE);
     }
 
-    // 内部使用
     CornucopiaContents(List<ItemStack> items, Fraction weight, int maxSize)
     {
         this.items = items;
@@ -148,7 +147,6 @@ public final class CornucopiaContents implements TooltipComponent
     {
         private final List<ItemStack> items;
         private Fraction weight;// weight 总共的占比权重情况
-        // todo 兼容”容量附魔“
         private int maxSize;
 
         public Mutable(CornucopiaContents contents)

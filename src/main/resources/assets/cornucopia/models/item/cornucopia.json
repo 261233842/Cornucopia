@@ -6,19 +6,19 @@
   "overrides": [
     {
       "predicate": {
-        "cornucopia:weight": 0.25
+        "cornucopia:weight": 0.250001
       },
       "model": "cornucopia:item/cornucopia_1"
     },
     {
       "predicate": {
-        "cornucopia:weight": 0.5
+        "cornucopia:weight": 0.50001
       },
       "model": "cornucopia:item/cornucopia_2"
     },
     {
       "predicate": {
-        "cornucopia:weight": 0.75
+        "cornucopia:weight": 0.750001
       },
       "model": "cornucopia:item/cornucopia_3"
     }
