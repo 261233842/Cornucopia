@@ -5,7 +5,6 @@ import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
 import com.pizza573.cornucopia.common.util.CornucopiaContentHelper;
-import com.pizza573.cornucopia.common.util.ModParticleHelper;
 import com.pizza573.cornucopia.data.enchantment.ModEnchantments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -35,7 +34,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
@@ -176,18 +174,19 @@ public class CornucopiaItem extends Item
     {
         suitableFood.getItem().finishUsingItem(suitableFood, level, livingEntity);// 里头调用了livingEntity.eat(...)
         CornucopiaContentHelper.removeOneItem(stack, suitableFoodIndex);
+//        ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
 
         int random = new Random().nextInt(100); // 0-99
-        if (livingEntity instanceof ServerPlayer player) {
-            if (random == 0) {
+        if (livingEntity instanceof Player player) {
+            if (random >50) {
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.DRAGON_BREATH, UniformInt.of(15, 20));
                 player.drop(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), true);
-                ModParticleHelper.spawnPurpleAround(level, livingEntity);
             } else if (random <= 5) {
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
                 player.drop(new ItemStack(Items.GOLDEN_APPLE), true);
-                ModParticleHelper.spawnGreenAround(level, livingEntity);
             } else if (random <= 7) {
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
                 player.drop(new ItemStack(Items.APPLE), true);
-                ModParticleHelper.spawnGreenAround(level, livingEntity);
             }
         }
 
