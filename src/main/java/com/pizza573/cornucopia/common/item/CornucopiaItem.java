@@ -5,16 +5,22 @@ import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
 import com.pizza573.cornucopia.common.util.CornucopiaContentHelper;
+import com.pizza573.cornucopia.common.util.ModParticleHelper;
 import com.pizza573.cornucopia.data.enchantment.ModEnchantments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +35,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
@@ -169,6 +176,21 @@ public class CornucopiaItem extends Item
     {
         suitableFood.getItem().finishUsingItem(suitableFood, level, livingEntity);// 里头调用了livingEntity.eat(...)
         CornucopiaContentHelper.removeOneItem(stack, suitableFoodIndex);
+
+        int random = new Random().nextInt(100); // 0-99
+        if (livingEntity instanceof ServerPlayer player) {
+            if (random == 0) {
+                player.drop(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), true);
+                ModParticleHelper.spawnPurpleAround(level, livingEntity);
+            } else if (random <= 5) {
+                player.drop(new ItemStack(Items.GOLDEN_APPLE), true);
+                ModParticleHelper.spawnGreenAround(level, livingEntity);
+            } else if (random <= 7) {
+                player.drop(new ItemStack(Items.APPLE), true);
+                ModParticleHelper.spawnGreenAround(level, livingEntity);
+            }
+        }
+
         return stack; // 返回最初的stack，即CornucopiaItem
     }
 
@@ -219,7 +241,7 @@ public class CornucopiaItem extends Item
         int foodValues = Mth.mulAndTruncate(cornucopiaContents.weight(), 64);
         Fraction proportion = Fraction.getFraction((double) foodValues / getMaxSize(stack));
 
-        return Math.max(1,Mth.mulAndTruncate(proportion, 13));
+        return Math.max(1, Mth.mulAndTruncate(proportion, 13));
     }
 
     @Override

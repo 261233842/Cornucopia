@@ -28,8 +28,8 @@ public final class CornucopiaContents implements TooltipComponent
     public static final StreamCodec<RegistryFriendlyByteBuf, CornucopiaContents> STREAM_CODEC;// The codec to read/write the data across the network
     // 用于物品存储的相关数据
     private final List<ItemStack> items;
-    private final Fraction weight;
-    private final int maxSize;// 后续要用附魔修改，不能为 static
+    private final Fraction weight; // 1 weight = 1 stack
+    private final int maxSize;
 
     // 初始化使用
     public CornucopiaContents(List<ItemStack> items)
@@ -94,6 +94,15 @@ public final class CornucopiaContents implements TooltipComponent
         return this.items.size();
     }
 
+    public boolean isFull()
+    {
+        int count = 0;
+        for (ItemStack itemStack : this.items)
+            if (itemStack.getCount() > 0)
+                count += itemStack.getCount();
+
+        return count >= this.maxSize;
+    }
     public boolean isEmpty()
     {
         return this.items.isEmpty();

@@ -1,7 +1,6 @@
 package com.pizza573.cornucopia.data.enchantment;
 
 import com.pizza573.cornucopia.Cornucopia;
-import com.pizza573.cornucopia.common.registry.ModDataComponents;
 import com.pizza573.cornucopia.common.tag.ModTags;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -12,15 +11,11 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraft.world.item.enchantment.effects.AddValue;
 
 public class ModEnchantments
 {
     // 定义一个附魔资源键
     public static final ResourceKey<Enchantment> CAPACITY = key("capacity");
-    public static final ResourceKey<Enchantment> NUTRITION = key("nutrition");
-    public static final ResourceKey<Enchantment> COPIOUS = key("copious");
 
     public static void bootstrap(BootstrapContext<Enchantment> context)
     {
@@ -33,54 +28,15 @@ public class ModEnchantments
                 Enchantment.enchantment(
                         Enchantment.definition(
                                 items.getOrThrow(ModTags.CORNUCOPIA),
-                                5,
+                                1,
                                 2,
                                 Enchantment.dynamicCost(5, 8),
                                 Enchantment.dynamicCost(55, 8),
-                                2,
-                                EquipmentSlotGroup.MAINHAND
-                        )
-                )
-        );
-
-        register(
-                context,
-                NUTRITION,
-                Enchantment.enchantment(
-                        Enchantment.definition(
-                                items.getOrThrow(ModTags.CORNUCOPIA),
-                                5,
-                                2,
-                                Enchantment.dynamicCost(15, 9),
-                                Enchantment.dynamicCost(50, 8),
                                 4,
                                 EquipmentSlotGroup.MAINHAND
                         )
-                ).withEffect(
-                        ModDataComponents.NUTRITION.get(),
-                        new AddValue(LevelBasedValue.perLevel(64.0F, 64.0F))
                 )
         );
-
-        register(
-                context,
-                COPIOUS,
-                Enchantment.enchantment(
-                        Enchantment.definition(
-                                items.getOrThrow(ModTags.CORNUCOPIA),
-                                5,
-                                2,
-                                Enchantment.dynamicCost(15, 9),
-                                Enchantment.dynamicCost(50, 8),
-                                4,
-                                EquipmentSlotGroup.MAINHAND
-                        )
-                ).withEffect(
-                        ModDataComponents.COPIOUS.get(),
-                        new AddValue(LevelBasedValue.perLevel(64.0F, 64.0F))
-                )
-        );
-
     }
 
     // 注册附魔的方法
