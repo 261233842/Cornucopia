@@ -38,6 +38,7 @@ import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CornucopiaItem extends Item
 {
@@ -174,17 +175,16 @@ public class CornucopiaItem extends Item
     {
         suitableFood.getItem().finishUsingItem(suitableFood, level, livingEntity);// 里头调用了livingEntity.eat(...)
         CornucopiaContentHelper.removeOneItem(stack, suitableFoodIndex);
-//        ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
 
-        int random = new Random().nextInt(100); // 0-99
+        int random= ThreadLocalRandom.current().nextInt(100);
         if (livingEntity instanceof Player player) {
-            if (random >50) {
+            if (random ==0) {
                 ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.DRAGON_BREATH, UniformInt.of(15, 20));
                 player.drop(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), true);
-            } else if (random <= 5) {
+            } else if (random <= 3) {
                 ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
                 player.drop(new ItemStack(Items.GOLDEN_APPLE), true);
-            } else if (random <= 7) {
+            } else if (random <= 5) {
                 ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
                 player.drop(new ItemStack(Items.APPLE), true);
             }
