@@ -172,9 +172,13 @@ public final class CornucopiaContents implements TooltipComponent
             return this;
         }
 
+        public int getMaxSize(){
+            return this.maxSize;
+        }
+
         public void setMaxSize(int maxSize)
         {
-            if (maxSize < 64)
+            if (maxSize < INIT_SIZE)
                 return;
             this.maxSize = maxSize;
         }

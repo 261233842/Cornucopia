@@ -14,7 +14,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -96,7 +95,6 @@ public class CornucopiaItem extends Item
             } else {
                 ItemStack other = slot.getItem();
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-                cornucopiaContents$mutable.setMaxSize(getMaxSize(stack));// 刷新容量
                 if (other.isEmpty()) {
 //                    System.out.println("remove one type food: " + other.getItem());
                     this.playRemoveOneSound(player);
@@ -107,6 +105,9 @@ public class CornucopiaItem extends Item
                         cornucopiaContents$mutable.tryInsert(itemstack2);
                     }
                 } else if (other.getItem().canFitInsideContainerItems() && other.getFoodProperties(player) != null) {// 食物判断
+                    if (cornucopiaContents$mutable.getMaxSize() != getMaxSize(stack)) {
+                        cornucopiaContents$mutable.setMaxSize(getMaxSize(stack));// 刷新容量
+                    }
                     int i = cornucopiaContents$mutable.tryTransfer(slot, player);
                     if (i > 0) this.playInsertSound(player);
                 }
@@ -127,7 +128,6 @@ public class CornucopiaItem extends Item
                 return false;
             } else {
                 CornucopiaContents.Mutable cornucopiaContents$mutable = new CornucopiaContents.Mutable(cornucopiaContents);
-                cornucopiaContents$mutable.setMaxSize(getMaxSize(stack));// 刷新容量
                 if (other.isEmpty()) {
                     ItemStack itemstack = cornucopiaContents$mutable.removeOneStack();
                     if (itemstack != null) {
@@ -135,6 +135,9 @@ public class CornucopiaItem extends Item
                         access.set(itemstack);
                     }
                 } else if (other.getFoodProperties(player) != null) { // 食物判断
+                    if (cornucopiaContents$mutable.getMaxSize() != getMaxSize(stack)) {
+                        cornucopiaContents$mutable.setMaxSize(getMaxSize(stack));// 刷新容量
+                    }
                     int i = cornucopiaContents$mutable.tryInsert(other);
                     if (i > 0) {
                         this.playInsertSound(player);
@@ -176,16 +179,16 @@ public class CornucopiaItem extends Item
         suitableFood.getItem().finishUsingItem(suitableFood, level, livingEntity);// 里头调用了livingEntity.eat(...)
         CornucopiaContentHelper.removeOneItem(stack, suitableFoodIndex);
 
-        int random= ThreadLocalRandom.current().nextInt(100);
+        int random = ThreadLocalRandom.current().nextInt(100);
         if (livingEntity instanceof Player player) {
-            if (random ==0) {
+            if (random == 0) {
                 ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.DRAGON_BREATH, UniformInt.of(15, 20));
                 player.drop(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), true);
             } else if (random <= 3) {
-                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5, 10));
                 player.drop(new ItemStack(Items.GOLDEN_APPLE), true);
             } else if (random <= 5) {
-                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y,level, livingEntity.blockPosition(), 1.2,ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5,10));
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5, 10));
                 player.drop(new ItemStack(Items.APPLE), true);
             }
         }
