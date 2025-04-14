@@ -1,4 +1,4 @@
-package com.pizza573.cornucopia.common.util;
+package com.pizza573.cornucopia.common.item.components;
 
 import com.pizza573.cornucopia.Cornucopia;
 import net.minecraft.world.entity.player.Player;

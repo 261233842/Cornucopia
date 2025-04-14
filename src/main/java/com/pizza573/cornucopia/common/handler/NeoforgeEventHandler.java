@@ -2,11 +2,9 @@ package com.pizza573.cornucopia.common.handler;
 
 import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.common.registry.ModItems;
-import com.pizza573.cornucopia.common.util.CornucopiaContentHelper;
-import net.minecraft.client.telemetry.events.WorldLoadTimesEvent;
+import com.pizza573.cornucopia.common.item.components.CornucopiaContentHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.profiling.jfr.event.ServerTickTimeEvent;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;

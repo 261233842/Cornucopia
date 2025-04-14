@@ -4,7 +4,7 @@ import com.pizza573.cornucopia.Config;
 import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
-import com.pizza573.cornucopia.common.util.CornucopiaContentHelper;
+import com.pizza573.cornucopia.common.item.components.CornucopiaContentHelper;
 import com.pizza573.cornucopia.data.enchantment.ModEnchantments;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

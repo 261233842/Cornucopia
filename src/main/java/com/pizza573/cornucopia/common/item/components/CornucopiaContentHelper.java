@@ -1,9 +1,8 @@
-package com.pizza573.cornucopia.common.util;
+package com.pizza573.cornucopia.common.item.components;
 
 import com.pizza573.cornucopia.Config;
 import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
-import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
