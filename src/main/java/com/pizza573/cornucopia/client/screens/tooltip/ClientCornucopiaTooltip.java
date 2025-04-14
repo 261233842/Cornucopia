@@ -18,29 +18,36 @@ public class ClientCornucopiaTooltip implements ClientTooltipComponent
     private static final ResourceLocation BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("container/bundle/background");
     private final CornucopiaContents contents;
 
-    public ClientCornucopiaTooltip(CornucopiaTooltip component) {
+    public ClientCornucopiaTooltip(CornucopiaTooltip component)
+    {
         this.contents = component.contents();
     }
+
     @Override
-    public int getHeight() {
+    public int getHeight()
+    {
         return this.backgroundHeight() + 4;
     }
 
     @Override
-    public int getWidth(@NotNull Font font) {
+    public int getWidth(@NotNull Font font)
+    {
         return this.backgroundWidth();
     }
 
-    private int backgroundWidth() {
+    private int backgroundWidth()
+    {
         return this.gridSizeX() * 18 + 2;
     }
 
-    private int backgroundHeight() {
+    private int backgroundHeight()
+    {
         return this.gridSizeY() * 20 + 2;
     }
 
     @Override
-    public void renderImage(@NotNull Font font, int x, int y, GuiGraphics guiGraphics) {
+    public void renderImage(@NotNull Font font, int x, int y, GuiGraphics guiGraphics)
+    {
         int i = this.gridSizeX();
         int j = this.gridSizeY();
         guiGraphics.blitSprite(BACKGROUND_SPRITE, x, y, this.backgroundWidth(), this.backgroundHeight());
@@ -56,7 +63,8 @@ public class ClientCornucopiaTooltip implements ClientTooltipComponent
         }
     }
 
-    private void renderSlot(int x, int y, int itemIndex, boolean isBundleFull, GuiGraphics guiGraphics, Font font) {
+    private void renderSlot(int x, int y, int itemIndex, boolean isBundleFull, GuiGraphics guiGraphics, Font font)
+    {
         if (itemIndex >= this.contents.size()) {
             this.blit(guiGraphics, x, y, isBundleFull ? ClientCornucopiaTooltip.Texture.BLOCKED_SLOT : ClientCornucopiaTooltip.Texture.SLOT);
         } else {
@@ -70,20 +78,24 @@ public class ClientCornucopiaTooltip implements ClientTooltipComponent
         }
     }
 
-    private void blit(GuiGraphics guiGraphics, int x, int y, ClientCornucopiaTooltip.Texture texture) {
+    private void blit(GuiGraphics guiGraphics, int x, int y, ClientCornucopiaTooltip.Texture texture)
+    {
         guiGraphics.blitSprite(texture.sprite, x, y, 0, texture.w, texture.h);
     }
 
-    private int gridSizeX() {
-        return Math.max(2, (int)Math.ceil(Math.sqrt((double)this.contents.size() + 1.0)));
+    private int gridSizeX()
+    {
+        return Math.max(2, (int) Math.ceil(Math.sqrt((double) this.contents.size() + 1.0)));
     }
 
-    private int gridSizeY() {
-        return (int)Math.ceil(((double)this.contents.size() + 1.0) / (double)this.gridSizeX());
+    private int gridSizeY()
+    {
+        return (int) Math.ceil(((double) this.contents.size() + 1.0) / (double) this.gridSizeX());
     }
 
     @OnlyIn(Dist.CLIENT)
-    enum Texture {
+    enum Texture
+    {
         BLOCKED_SLOT(ResourceLocation.withDefaultNamespace("container/bundle/blocked_slot"), 18, 20),
         SLOT(ResourceLocation.withDefaultNamespace("container/bundle/slot"), 18, 20);
 
@@ -91,7 +103,8 @@ public class ClientCornucopiaTooltip implements ClientTooltipComponent
         public final int w;
         public final int h;
 
-        Texture(ResourceLocation sprite, int w, int h) {
+        Texture(ResourceLocation sprite, int w, int h)
+        {
             this.sprite = sprite;
             this.w = w;
             this.h = h;

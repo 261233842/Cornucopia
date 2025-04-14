@@ -1,7 +1,7 @@
 package com.pizza573.cornucopia;
 
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
-import com.pizza573.cornucopia.common.registry.ModCreativeTabs;
+//import com.pizza573.cornucopia.common.registry.ModCreativeTabs;
 import com.pizza573.cornucopia.common.registry.ModItems;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -27,7 +27,7 @@ public class Cornucopia
     public Cornucopia(IEventBus modEventBus, ModContainer modContainer)
     {
         ModItems.REGISTER.register(modEventBus);
-        ModCreativeTabs.REGISTER.register(modEventBus);
+//        ModCreativeTabs.REGISTER.register(modEventBus);
         ModDataComponents.REGISTER.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
 

@@ -46,7 +46,7 @@ public class CornucopiaContentHelper
 
         float health = player.getHealth();
         float thresholdValue = Config.COMMON.lifeThresholdValue.get();
-        int index = -1;
+        int index = 0;
 
         // 满饥饿值:附魔金>金>
         if (!player.getFoodData().needsFood()) {

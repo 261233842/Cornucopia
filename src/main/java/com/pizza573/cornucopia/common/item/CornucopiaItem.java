@@ -1,6 +1,7 @@
 package com.pizza573.cornucopia.common.item;
 
 import com.pizza573.cornucopia.Config;
+import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.client.screens.tooltip.CornucopiaTooltip;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
@@ -39,7 +40,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CornucopiaItem extends Item
+// 为了兼容 Mouse Teawks 继承 BundleItem（之前继承 Item）
+public class CornucopiaItem extends BundleItem
 {
     // static 变量，所有对象共享同一个静态字段值，示例：计数器、配置常量等。
     private static final int COPIOUS_COLOR = Mth.color(0.133f, 0.545f, 0.133f);// 暗绿色
@@ -86,6 +88,7 @@ public class CornucopiaItem extends Item
     @Override
     public boolean overrideStackedOnOther(ItemStack stack, @NotNull Slot slot, @NotNull ClickAction action, @NotNull Player player)
     {
+        Cornucopia.LOGGER.info("overrideStackedOnOther");
         if (stack.getCount() != 1 || action != ClickAction.SECONDARY) {
             return false;
         } else {
@@ -182,13 +185,13 @@ public class CornucopiaItem extends Item
         int random = ThreadLocalRandom.current().nextInt(100);
         if (livingEntity instanceof Player player) {
             if (random == 0) {
-                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.DRAGON_BREATH, UniformInt.of(15, 20));
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.WITCH, UniformInt.of(20, 35));
                 player.drop(new ItemStack(Items.ENCHANTED_GOLDEN_APPLE), true);
-            } else if (random <= 3) {
-                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5, 10));
+            } else if (random <= 2) {
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(20, 35));
                 player.drop(new ItemStack(Items.GOLDEN_APPLE), true);
-            } else if (random <= 5) {
-                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(5, 10));
+            } else if (random <= 4) {
+                ParticleUtils.spawnParticlesAlongAxis(Direction.Axis.Y, level, livingEntity.blockPosition(), 1.2, ParticleTypes.HAPPY_VILLAGER, UniformInt.of(20, 35));
                 player.drop(new ItemStack(Items.APPLE), true);
             }
         }
@@ -285,6 +288,7 @@ public class CornucopiaItem extends Item
         return false;
     }
 
+    // 父类中为 private，不能直接调用
     private void playRemoveOneSound(Entity entity)
     {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
@@ -307,4 +311,6 @@ public class CornucopiaItem extends Item
         return suitableFood.getItem().getEatingSound();
     }
     // 杂项 End
+
+    //1.21.1 中，BundleItem 右键使用，调用 dropContents 方法，丢弃所有物品。
 }

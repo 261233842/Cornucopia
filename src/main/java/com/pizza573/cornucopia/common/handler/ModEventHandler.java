@@ -4,9 +4,12 @@ import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import com.pizza573.cornucopia.common.network.ServerBoundDropCornucopiaContentsPacket;
+import com.pizza573.cornucopia.common.registry.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -34,5 +37,12 @@ public class ModEventHandler
     public static void modifyComponents(ModifyDefaultComponentsEvent event)
     {
         event.modify(Items.GOAT_HORN, builder -> builder.set(ModDataComponents.CORNUCOPIA_CONTENTS.get(), CornucopiaContents.EMPTY));
+    }
+
+    @SubscribeEvent
+    public static void buildCreativeTabs(BuildCreativeModeTabContentsEvent event){
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES){
+            event.accept(ModItems.CORNUCOPIA);
+        }
     }
 }

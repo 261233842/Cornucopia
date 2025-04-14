@@ -1,16 +1,16 @@
 package com.pizza573.cornucopia.common.registry;
 
-import com.pizza573.cornucopia.Cornucopia;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredRegister;
+//import com.pizza573.cornucopia.Cornucopia;
+//import net.minecraft.core.registries.Registries;
+//import net.minecraft.network.chat.Component;
+//import net.minecraft.world.item.CreativeModeTab;
+//import net.minecraft.world.item.ItemStack;
+//import net.neoforged.neoforge.registries.DeferredHolder;
+//import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModCreativeTabs
 {
-    public static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Cornucopia.MOD_ID);
+/*    public static final DeferredRegister<CreativeModeTab> REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Cornucopia.MOD_ID);
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB_HOLDER = REGISTER.register("cornucopia", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup."+Cornucopia.MOD_ID))// The language key for the title of your CreativeModeTab 可以运用于本地化
@@ -29,5 +29,5 @@ public class ModCreativeTabs
     private static ItemStack createTabStack()
     {
         return ModItems.CREATIVE_TAB_DISPLAY.get().getDefaultInstance();
-    }
+    }*/
 }

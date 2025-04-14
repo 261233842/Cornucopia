@@ -8,7 +8,6 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-// 策略模式：策略接口
 public enum FoodSelectionStrategy
 {
     CAN_ALWAYS_EAT {
@@ -24,7 +23,7 @@ public enum FoodSelectionStrategy
                 }
             }
 
-            return NO_STACK_INDEX;
+            return DEFAULT_INDEX;
         }
     },
     MAX_NUTRITION {
@@ -34,7 +33,7 @@ public enum FoodSelectionStrategy
             int foodLevel = player.getFoodData().getFoodLevel();
             int pre_score = 20;
             int pre_nutrition = 0;
-            int index = NO_STACK_INDEX;
+            int index = DEFAULT_INDEX;
 
             for (int i = 0; i < items.size(); i++) {
                 ItemStack foodItemStack = items.get(i);
@@ -69,7 +68,7 @@ public enum FoodSelectionStrategy
                     return i;
                 }
             }
-            return NO_STACK_INDEX; // 如果没有普通金苹果，返回 -1
+            return DEFAULT_INDEX; // 如果没有普通金苹果，返回 -1
         }
     },
     ENCHANTED_APPLE {
@@ -81,12 +80,12 @@ public enum FoodSelectionStrategy
                     return i;
                 }
             }
-            return NO_STACK_INDEX;
+            return DEFAULT_INDEX;
         }
     };
 
 
-    final int NO_STACK_INDEX = -1;
+    final int DEFAULT_INDEX = 0;
 
     public abstract int selectFoodIndex(Player player, List<ItemStack> items);
 }

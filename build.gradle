@@ -115,21 +115,21 @@ dependencies {
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
 
-    // JEI
+/*    // JEI
     // compile against the JEI API but do not include it at runtime
     compileOnly("mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}")
     // at runtime, use the full JEI jar for NeoForge
-    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")
+    runtimeOnly("mezz.jei:jei-${mc_version}-neoforge:${jei_version}")*/
 
     // Apple Skin
-    compileOnly("squeek.appleskin:appleskin-neoforge:mc${mc_version}-${appleSkin_version}:api")
-    runtimeOnly("squeek.appleskin:appleskin-neoforge:mc${mc_version}-${appleSkin_version}")
+//    compileOnly("squeek.appleskin:appleskin-neoforge:mc${mc_version}-${appleSkin_version}:api")
+//    runtimeOnly("squeek.appleskin:appleskin-neoforge:mc${mc_version}-${appleSkin_version}")
 
     // Mouse Tweaks
-    implementation "curse.maven:mouse-tweaks-60089:5637846"
+//    implementation "curse.maven:mouse-tweaks-60089:5637846"
 
     // SOL carrot
-    implementation "curse.maven:spice-of-life-carrot-edition-277616:5957429"
+//    implementation "curse.maven:spice-of-life-carrot-edition-277616:5957429"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
