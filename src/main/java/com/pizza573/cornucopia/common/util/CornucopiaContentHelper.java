@@ -1,15 +1,15 @@
 package com.pizza573.cornucopia.common.util;
 
 import com.pizza573.cornucopia.Config;
+import com.pizza573.cornucopia.Cornucopia;
 import com.pizza573.cornucopia.common.registry.ModDataComponents;
 import com.pizza573.cornucopia.common.item.components.CornucopiaContents;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.List;
+import java.util.Map;
 
 public class CornucopiaContentHelper
 {
@@ -40,67 +40,67 @@ public class CornucopiaContentHelper
     {
         CornucopiaContents contents = cornucopia.getOrDefault(ModDataComponents.CORNUCOPIA_CONTENTS, CornucopiaContents.EMPTY);
         List<ItemStack> items = (List<ItemStack>) contents.items();
+        Map<Integer, FoodSelectionStrategy> strategies;
 
         // 处理特殊条件
         if (items.isEmpty()) return 0;
         if (items.size() == 1) return 0;
 
-        int foodLevel = player.getFoodData().getFoodLevel();// 饥饿值
         float health = player.getHealth();
         float thresholdValue = Config.COMMON.lifeThresholdValue.get();
-        int index = 0;
-        // 初始化（附魔）金苹果、canAlwaysEat 和 canAlwaysEat 索引
-        int enchantedGoldenApple_i = -1;
-        int goldenApple_i = -1;
-        int canAlwaysEat_i = -1;
+        int index = -1;
 
-        int pre_nutrition = 0;
-        int pre_score = 20;
+        // 满饥饿值:附魔金>金>canAlwaysEat
+        if (!player.getFoodData().needsFood()) {
+            Cornucopia.LOGGER.info("Full hunger value strategy.");
+            strategies = Map.of(
+                    0, FoodSelectionStrategy.ENCHANTED_APPLE,
+                    1, FoodSelectionStrategy.GOLDEN_APPLE,
+                    2, FoodSelectionStrategy.CAN_ALWAYS_EAT
+            );
 
-        for (int i = 0; i < items.size(); i++) {
-            ItemStack foodItemStack = items.get(i);
-            Item item = items.get(i).getItem();
-            FoodProperties foodProperties = foodItemStack.getFoodProperties(player);
-
-            if (foodProperties == null) continue;
-
-            // switch case 不支持布尔值判断
-            if (item == Items.ENCHANTED_GOLDEN_APPLE) enchantedGoldenApple_i = i;
-            if (item == Items.GOLDEN_APPLE) goldenApple_i = i;
-            if (foodProperties.canAlwaysEat()) canAlwaysEat_i = i;
-
-            // 饥饿值非满，不能吃（附魔）金苹果
-            if (player.getFoodData().needsFood() && !isGoldenApple(foodItemStack)) {
-                // 更新尽量吃饱的食物的索引
-                int aft_nutrition = foodProperties.nutrition();
-                int aft_score = Math.abs(20 - (foodLevel + aft_nutrition));
-                if (aft_score < pre_score || (aft_score == pre_score && aft_nutrition > pre_nutrition)) {
-                    index = i;
-                    pre_score = aft_score;
+            for (int i = 0; i < 3; i++) {
+                if (index == -1) {
+                    Cornucopia.LOGGER.info("strategy:{}", strategies.get(i));
+                    index = strategies.get(i).selectFoodIndex(player, items);
+                    Cornucopia.LOGGER.info("selectFoodIndex:{}", index);
+                } else {
+                    break;
                 }
             }
         }
 
-        // 满饥饿值
-        if (!player.getFoodData().needsFood())
-            // 附魔金>普金>canAlwaysEat
-            if (enchantedGoldenApple_i != -1) index = enchantedGoldenApple_i;
-            else if (goldenApple_i != -1) index = goldenApple_i;
-            else if (canAlwaysEat_i != -1) index = canAlwaysEat_i;
-
-        // 非满饥饿值 低生命值
+        // 非满饥饿值
         if (player.getFoodData().needsFood()) {
-            if (health <= thresholdValue) {// 低生命值，附魔金>普金>尽可能吃到满饥饿值
-                if (enchantedGoldenApple_i != -1) index = enchantedGoldenApple_i;
-                else if (goldenApple_i != -1) index = goldenApple_i;
-            } else {// 高生命值
+            Cornucopia.LOGGER.info("Not Full hunger value strategy.");
+            if (health <= thresholdValue) {// 低生命值:附魔金>金>MaxNutrition
+                strategies = Map.of(
+                        0, FoodSelectionStrategy.ENCHANTED_APPLE,
+                        1, FoodSelectionStrategy.GOLDEN_APPLE,
+                        2, FoodSelectionStrategy.MAX_NUTRITION
+                );
+
+                for (int i = 0; i < 3; i++) {
+                    if (index == -1) {
+                        index = strategies.get(i).selectFoodIndex(player, items);
+                    } else {
+                        break;
+                    }
+                }
+            } else {// 高生命值:附魔金>金（size=2）or MaxNutrition最先
                 if (items.size() == 2 && isGoldenApple(items.get(0)) && isGoldenApple(items.get(1))) {
-                    if (enchantedGoldenApple_i != -1) index = enchantedGoldenApple_i;
-                    else if (goldenApple_i != -1) index = goldenApple_i;
+                    if(items.getFirst().getItem()==Items.ENCHANTED_GOLDEN_APPLE){
+                        index = 0;
+                    }else{
+                        index=1;
+                    }
+                } else {
+                    index=FoodSelectionStrategy.MAX_NUTRITION.selectFoodIndex(player, items);
                 }
             }
         }
 
+        Cornucopia.LOGGER.info("SelectedFoodIndex:{}, SelectedFood:{}", index, items.get(index));
         return index;
     }
 

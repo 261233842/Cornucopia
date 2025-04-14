@@ -21,9 +21,9 @@ import java.util.stream.Stream;
 
 public final class CornucopiaContents implements TooltipComponent
 {
-    public static final CornucopiaContents EMPTY = new CornucopiaContents(List.of());
     private static final int NO_STACK_INDEX = -1;
     private static final int INIT_SIZE = 128;
+    public static final CornucopiaContents EMPTY = new CornucopiaContents(List.of());
     public static final Codec<CornucopiaContents> CODEC;// The codec to read/write the data to disk
     public static final StreamCodec<RegistryFriendlyByteBuf, CornucopiaContents> STREAM_CODEC;// The codec to read/write the data across the network
     // 用于物品存储的相关数据
