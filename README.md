@@ -6,53 +6,60 @@ _Compatible with the AppleSkin mod starting from version 2.1.1!_
 
 The Cornucopia is a new item for storing food, allowing players quick and convenient access to their food resources.
 
-###### Compatible with AppleSkin mod from 2.1.1 version!
 
-## Add Cornucopia
+### How to Obtain the Cornucopia
 
-Cornucopia is a new food storage item that allows players to quickly and easily access its food resources. Now you can
-get a Cornucopia not only by joining a world, but also by using a goat horn item filled with food.
+- First-time Eating Reward: The first time you eat, you will be rewarded with a Goat Horn.
 
-## The Way To Get Cornucopia
+- Goat Horn Conversion: By right-clicking with a Goat Horn filled with food, it can be converted into a Cornucopia.
 
-- **New World Rewards**: The first meal is rewarded with a goat's horn.
-- **Goat Horn Conversion**: By right-clicking a goat horn filled with food, you can convert it into a cornucopia horn.
+### Hotkeys
 
-## Shortcut Key
+- Shift + Q: Drop all food from the Cornucopia.
 
-- **Shift + Q**: Discard all food in Cornucopia.
+### Enchantments
 
-## Feeding Mechanism
+- Capacity II: Increases the Cornucopia's capacity by 128. (Each level adds 64)
 
-- Life Threshold（can be modified in the configuration）：The higher the threshold, the easier it is to choose the (
-  enchanted) golden apple, and the more difficult it is to choose the (enchanted) golden apple.
-- General Priority：enchanted golden apple > golden apple > more hunger recovery is
-  preferred
-- Special Priority：When the hunger value is not full and the health value is higher than the threshold, the hunger value
-  is restored more than the priority, and the (enchanted) golden apple cannot be eaten
+### Mechanics
 
-*The English version was translated by Youdao translator.*
----
+- Prioritizes selecting food that replenishes full hunger.
 
-# 丰饶之角
+- When health is below the set life threshold (default is 10 points), it will prioritize consuming Golden Apples (Enchanted Golden Apples have higher priority).
 
-###### 从2.1.1版本开始，兼容苹果皮模组!
+- Slightly reduces eating time.
 
-## 概述
+- Eating has a chance to reward three types of apples.
 
-丰饶角是一个存储食物的新物品，它允许玩家快捷并方便地访问其中的食物资源。
+### 概述
 
-## 获取丰饶角的方法
+本模组为游戏加入了丰饶之角（Cornucopia）。
 
-- **新世界奖励**：首次进食会奖励一个山羊角。
-- **山羊角转换**：通过右键使用装满食物的山羊角，可以将其转换为丰饶角。
+_从2.1.1版本开始，兼容苹果皮模组!_
 
-## 快捷键
+丰饶之角是一个存储食物的新物品，它允许玩家快捷并方便地访问其中的食物资源。
 
-- **Shift + Q**：将丰饶角中的所有食物全部丢弃。
 
-## 进食机制
+### 获取丰饶之角的方法
 
-- 生命阈值（可在配置修改）：阈值越高，越容易选择（附魔）金苹果，反之越难。
-- 一般优先级：附魔金苹果 > 金苹果 > 饥饿值回复多则优先
-- 特殊优先级：非满饥饿值且生命值高于阈值时，饥饿值回复多则优先，不能吃（附魔）金苹果。
+- 首次进食奖励：首次进食会奖励一个山羊角。
+
+- 山羊角转换：通过右键使用装满食物的山羊角，可以将其转换为丰饶角。
+
+### 快捷键
+
+- Shift + Q：将丰饶角中的所有食物全部丢弃。
+
+### 附魔
+
+- 容量Ⅱ：增加丰饶之角128容量。（每级增加64）
+
+### 机制
+
+- 优先选择补满饥饿值的食物。
+
+- 当生命值低于设定的生命阈值（默认10点）时，会优先进食金苹果（附魔金苹果优先级更高）。
+
+- 略微降低进食时间。
+
+- 进食有概率奖励三种苹果。
